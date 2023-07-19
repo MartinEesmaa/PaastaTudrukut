@@ -57,8 +57,19 @@ bool ShowLanguageSelectionScene() {
     int spacing = 10;
     int totalButtonsHeight = (buttonHeight + spacing) * MAX_LANGUAGES - spacing;
     int startY = (screenHeight - totalButtonsHeight) / 2;
+    int gamepad = 0;
 
-    while (!WindowShouldClose()) {
+    int selectedButton = 0;
+    bool languageSelected = false;
+
+    while (!WindowShouldClose() && !languageSelected) {
+        if (IsGamepadButtonDown(gamepad, GAMEPAD_BUTTON_LEFT_FACE_DOWN) || IsKeyPressed(KEY_DOWN)) {
+            selectedButton = (selectedButton + 1) % MAX_LANGUAGES;
+        }
+        else if (IsGamepadButtonDown(gamepad, GAMEPAD_BUTTON_LEFT_FACE_UP) || IsKeyPressed(KEY_UP)) {
+            selectedButton = (selectedButton - 1 + MAX_LANGUAGES) % MAX_LANGUAGES;
+        }
+
         Vector2 mousePosition = GetMousePosition();
 
         BeginDrawing();
@@ -68,12 +79,13 @@ bool ShowLanguageSelectionScene() {
             int buttonY = startY + i * (buttonHeight + spacing);
             Rectangle buttonRect = { (screenWidth - buttonWidth) / 2, buttonY, buttonWidth, buttonHeight };
 
-            if (MyCheckCollisionPointRec(mousePosition, buttonRect)) {
-                if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-                    selectedLanguage = i;
-                    return false;
-                }
+            if (i == selectedButton) {
                 DrawRectangleRec(buttonRect, LIGHTGRAY);
+                if ((IsGamepadButtonReleased(gamepad, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) || IsMouseButtonReleased(MOUSE_LEFT_BUTTON))) {
+                    selectedLanguage = i;
+                    languageSelected = true;
+                    break;
+                }
             }
             else {
                 DrawRectangleRec(buttonRect, WHITE);
@@ -83,17 +95,14 @@ bool ShowLanguageSelectionScene() {
         }
 
         EndDrawing();
-
-        if (WindowShouldClose()) {
-            return true;
-        }
     }
 
-    return false;
+    return WindowShouldClose();
 }
 
 bool ShowExitConfirmation() {
     while (!WindowShouldClose()) {
+        int gamepad = 0;
         BeginDrawing();
         ClearBackground(BLACK);
         DrawText(GetText(3), GetScreenWidth() / 4, GetScreenHeight() / 2, 30, WHITE);
@@ -103,10 +112,10 @@ bool ShowExitConfirmation() {
             return false;
         }
 
-        if (IsKeyPressed(KEY_J)) {
+        if (IsGamepadButtonReleased(gamepad, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) || IsKeyPressed(KEY_J)) {
             return true;
         }
-        else if (IsKeyPressed(KEY_E)) {
+        else if (IsGamepadButtonReleased(gamepad, GAMEPAD_BUTTON_RIGHT_FACE_LEFT) || IsKeyPressed(KEY_E)) {
             return false;
         }
     }
@@ -117,6 +126,8 @@ bool ShowExitConfirmation() {
 int main() {
     int screenWidth = 1280;
     int screenHeight = 720;
+
+    int gamepad = 0;
 
     InitWindow(screenWidth, screenHeight, "Päästa tüdrukut");
     SetWindowState(FLAG_VSYNC_HINT);
@@ -136,6 +147,7 @@ int main() {
         }
 
         if (WindowShouldClose() || IsKeyPressed(KEY_ESCAPE)) exitWindowRequested = true;
+        if (IsGamepadButtonReleased(gamepad, GAMEPAD_BUTTON_RIGHT_FACE_LEFT)) exitWindowRequested = true;
 
         if (exitWindowRequested) {
             exitWindow = ShowExitConfirmation();
