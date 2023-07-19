@@ -33,3 +33,9 @@
 
 # VSCode
 .vscode
+
+# Visual Studio
+Debug
+.vs
+*.vcxproj*
+*.sln
