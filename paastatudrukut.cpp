@@ -26,6 +26,7 @@ const char* textStrings[MAX_LANGUAGES][4] = {
 };
 
 int selectedLanguage = LANGUAGE_ESTONIAN;
+int gamepad = 0;
 
 const char* GetText(int index) {
     return textStrings[selectedLanguage][index];
@@ -57,7 +58,6 @@ bool ShowLanguageSelectionScene() {
     int spacing = 10;
     int totalButtonsHeight = (buttonHeight + spacing) * MAX_LANGUAGES - spacing;
     int startY = (screenHeight - totalButtonsHeight) / 2;
-    int gamepad = 0;
 
     int selectedButton = 0;
     bool languageSelected = false;
@@ -81,7 +81,7 @@ bool ShowLanguageSelectionScene() {
 
             if (i == selectedButton) {
                 DrawRectangleRec(buttonRect, LIGHTGRAY);
-                if ((IsGamepadButtonReleased(gamepad, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) || IsMouseButtonReleased(MOUSE_LEFT_BUTTON))) {
+                if ((IsGamepadButtonReleased(gamepad, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) || IsKeyPressed(KEY_ENTER) || IsMouseButtonReleased(MOUSE_LEFT_BUTTON))) {
                     selectedLanguage = i;
                     languageSelected = true;
                     break;
@@ -102,7 +102,6 @@ bool ShowLanguageSelectionScene() {
 
 bool ShowExitConfirmation() {
     while (!WindowShouldClose()) {
-        int gamepad = 0;
         BeginDrawing();
         ClearBackground(BLACK);
         DrawText(GetText(3), GetScreenWidth() / 4, GetScreenHeight() / 2, 30, WHITE);
@@ -126,8 +125,6 @@ bool ShowExitConfirmation() {
 int main() {
     int screenWidth = 1280;
     int screenHeight = 720;
-
-    int gamepad = 0;
 
     InitWindow(screenWidth, screenHeight, "Päästa tüdrukut");
     SetWindowState(FLAG_VSYNC_HINT);
@@ -161,11 +158,6 @@ int main() {
         DrawText(GetText(2), GetScreenWidth() / 45, GetScreenHeight() / 1.1, 50, BLACK);
         DrawRectangleLines(350, 150, 600, 100, BLACK);
         DrawRectangleLines(350, 300, 600, 100, BLACK);
-
-        if (exitWindowRequested) {
-            ClearBackground(BLACK);
-            DrawText(GetText(3), GetScreenWidth() / 4, GetScreenHeight() / 2, 30, WHITE);
-        }
 
         EndDrawing();
     }
