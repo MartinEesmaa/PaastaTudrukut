@@ -10,18 +10,30 @@ const char* languageNames[MAX_LANGUAGES] = {
     "English",
 };
 
-const char* textStrings[MAX_LANGUAGES][4] = {
+const char* textStrings[MAX_LANGUAGES][10] = {
     {
         "Päästa tüdrukut",
         "Alusta mängu",
         "2023 Martin Eesmaa",
         "Oled sa kindel, et tahad väljuda mängu ära? J/E?",
+        "Resolutsioon",
+        "Helitugevus",
+        "SFX tugevus",
+        "Teema",
+        "Keel",
+        "Heledus",
     },
     {
         "Save the Girl",
         "Start Game",
         "2023 Martin Eesmaa",
         "Are you sure you want to exit the game? J/E?",
+        "Resolution",
+        "Sound volume",
+        "SFX volume",
+        "Theme",
+        "Language",
+        "Brightness",
     },
 };
 
@@ -81,7 +93,7 @@ bool ShowLanguageSelectionScene() {
 
             if (i == selectedButton) {
                 DrawRectangleRec(buttonRect, LIGHTGRAY);
-                if ((IsGamepadButtonReleased(gamepad, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) || IsKeyPressed(KEY_ENTER) || IsMouseButtonReleased(MOUSE_LEFT_BUTTON))) {
+                if ((IsGamepadButtonReleased(gamepad, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) || IsKeyPressed(KEY_ENTER))) {
                     selectedLanguage = i;
                     languageSelected = true;
                     break;
@@ -138,6 +150,8 @@ int main() {
     bool exitWindowRequested = false;
     bool exitWindow = false;
 
+    Texture2D xnupp = LoadTexture("pilt/cross1.png");
+
     while (!exitWindow) {
         if (IsKeyPressed(KEY_SPACE)) {
             ToggleFullScreenWindow(screenWidth, screenHeight);
@@ -158,6 +172,21 @@ int main() {
         DrawText(GetText(2), GetScreenWidth() / 45, GetScreenHeight() / 1.1, 50, BLACK);
         DrawRectangleLines(350, 150, 600, 100, BLACK);
         DrawRectangleLines(350, 300, 600, 100, BLACK);
+        DrawTexture(xnupp, GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height, WHITE);
+        DrawCircle(GetScreenWidth() - 50, GetScreenHeight() - 50, 30, BLACK);
+
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+        {
+            Vector2 mousePos1;
+
+            if (mousePos1.x >= GetScreenWidth() - xnupp.width
+                && mousePos1.x <= GetScreenWidth()
+                && mousePos1.y >= GetScreenHeight() - xnupp.height
+                && mousePos1.y <= GetScreenHeight())
+            {
+                break;
+            }
+        }
 
         EndDrawing();
     }
