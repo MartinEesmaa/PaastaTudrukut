@@ -14,6 +14,10 @@ Enne kui ma hakkan ehitama mängu, ma kasutan Raylib koos C++ koodi teha mängup
 
 ![kujundus.png](kujundus.png)
 
+## Viimane kujundus
+
+![PäästaTüdrukutMenüü_viimane.png](kujundused/PäästaTüdrukutMenüü_viimane.png)
+
 ## Ehitada mängu
 
 Kui tahad ehitada mängu ja mängida, sul on vaja ehitaja C++ programmi, näiteks GCC või Visual Stuudios ja Raylib raamatukogu ja päised ka. Lisateavet võid uurida kuidas installida Raylib arvutisse: https://www.raylib.com/
