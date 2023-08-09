@@ -10,12 +10,13 @@ const char* languageNames[MAX_LANGUAGES] = {
     "English",
 };
 
-const char* textStrings[MAX_LANGUAGES][10] = {
+const char* textStrings[MAX_LANGUAGES][11] = {
     {
         "Päästa tüdrukut",
-        "Alusta mängu",
+        "Alusta mäng",
         "2023 Martin Eesmaa",
         "Oled sa kindel, et tahad väljuda mängu ära? J/E?",
+        "Tased",
         "Resolutsioon",
         "Helitugevus",
         "SFX tugevus",
@@ -28,6 +29,7 @@ const char* textStrings[MAX_LANGUAGES][10] = {
         "Start Game",
         "2023 Martin Eesmaa",
         "Are you sure you want to exit the game? J/E?",
+        "Levels",
         "Resolution",
         "Sound volume",
         "SFX volume",
@@ -105,11 +107,8 @@ bool ShowLanguageSelectionScene() {
 
             DrawText(languageNames[i], (screenWidth - MeasureText(languageNames[i], 30)) / 2, buttonY + 15, 30, BLACK);
         }
-
         EndDrawing();
     }
-
-    return WindowShouldClose();
 }
 
 bool ShowExitConfirmation() {
@@ -151,6 +150,8 @@ int main() {
     bool exitWindow = false;
 
     Texture2D xnupp = LoadTexture("pilt/cross1.png");
+    Font fontTtf = LoadFontEx("fondid/MAIAN.TTF", 72, 0, 250);
+    Font fontTtf1 = LoadFontEx("fondid/CHILLER.TTF", 100, 0, 250);
 
     while (!exitWindow) {
         if (IsKeyPressed(KEY_SPACE)) {
@@ -167,9 +168,10 @@ int main() {
 
         BeginDrawing();
         ClearBackground(WHITE);
-        DrawText(GetText(0), 450, 50, 50, BLACK);
-        DrawText(GetText(1), 475, 175, 50, BLACK);
-        DrawText(GetText(2), GetScreenWidth() / 45, GetScreenHeight() / 1.1, 50, BLACK);
+        DrawTextEx(fontTtf1, GetText(0), (Vector2) { 400.0f, 45.0f }, (float)fontTtf1.baseSize, 10, BLACK);
+        DrawTextEx(fontTtf, GetText(1), (Vector2) { 475.0f, 160.0f }, (float)fontTtf.baseSize, 2, BLACK);
+        DrawTextEx(fontTtf, GetText(4), (Vector2) { 550.0f, 315.0f }, (float)fontTtf.baseSize, 2, BLACK);
+        DrawTextEx(fontTtf, GetText(2), (Vector2) { GetScreenWidth() / 45.0f, GetScreenHeight() / 1.1f }, (float)fontTtf.baseSize, 2, BLACK);
         DrawRectangleLines(350, 150, 600, 100, BLACK);
         DrawRectangleLines(350, 300, 600, 100, BLACK);
         DrawTexture(xnupp, GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height, WHITE);
@@ -190,6 +192,8 @@ int main() {
 
         EndDrawing();
     }
+    UnloadFont(fontTtf);
+    UnloadFont(fontTtf1);
     CloseWindow();
     return 0;
 }
