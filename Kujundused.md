@@ -32,4 +32,8 @@ Viimane versioon:
 
 ![sätted_viimane](kujundused/SättedStseenViimane.png)
 
+## Tegelane
+
+![tegelane](kujundused/Tegelanemängija.png)
+
 - Martin Eesmaa

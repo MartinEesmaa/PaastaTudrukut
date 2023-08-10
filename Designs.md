@@ -32,4 +32,8 @@ Final version:
 
 ![settings_final](designs/SettingsSceneFinal.png)
 
+## Character
+
+![character](designs/CharacterPlayer.png)
+
 - Martin Eesmaa
