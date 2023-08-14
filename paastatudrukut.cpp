@@ -10,7 +10,7 @@ const char* languageNames[MAX_LANGUAGES] = {
     "English",
 };
 
-const char* textStrings[MAX_LANGUAGES][11] = {
+const char* textStrings[MAX_LANGUAGES][12] = {
     {
         "Päästa tüdrukut",
         "Alusta mäng",
@@ -23,6 +23,7 @@ const char* textStrings[MAX_LANGUAGES][11] = {
         "Teema",
         "Keel",
         "Heledus",
+        "Vali tegelane",
     },
     {
         "Save the Girl",
@@ -36,6 +37,7 @@ const char* textStrings[MAX_LANGUAGES][11] = {
         "Theme",
         "Language",
         "Brightness",
+        "Choose character",
     },
 };
 
@@ -133,6 +135,16 @@ bool ShowExitConfirmation() {
     return false;
 }
 
+bool ValiTegelane() {
+    while (!WindowShouldClose())
+    {
+        BeginDrawing();
+        ClearBackground(WHITE);
+        DrawText(GetText(11), GetScreenWidth() / 4, GetScreenHeight() / 2, 30, BLACK);
+        EndDrawing();
+    }
+}
+
 int main() {
     int screenWidth = 1280;
     int screenHeight = 720;
@@ -152,6 +164,9 @@ int main() {
     Texture2D xnupp = LoadTexture("pilt/cross1.png");
     Font fontTtf = LoadFontEx("fondid/MAIAN.TTF", 72, 0, 250);
     Font fontTtf1 = LoadFontEx("fondid/CHILLER.TTF", 100, 0, 250);
+
+    Rectangle imageRect = { GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height,
+                            static_cast<float>(xnupp.width), static_cast<float>(xnupp.height) };
 
     while (!exitWindow) {
         if (IsKeyPressed(KEY_SPACE)) {
@@ -177,19 +192,16 @@ int main() {
         DrawTexture(xnupp, GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height, WHITE);
         DrawCircle(GetScreenWidth() - 50, GetScreenHeight() - 50, 30, BLACK);
 
-        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) &&
+            CheckCollisionPointRec(GetMousePosition(), imageRect))
         {
-            Vector2 mousePos1;
-
-            if (mousePos1.x >= GetScreenWidth() - xnupp.width
-                && mousePos1.x <= GetScreenWidth()
-                && mousePos1.y >= GetScreenHeight() - xnupp.height
-                && mousePos1.y <= GetScreenHeight())
-            {
-                break;
-            }
+            exitWindowRequested = true;
         }
 
+	if (IsKeyPressed(KEY_O))
+	{
+		ValiTegelane();
+	}
         EndDrawing();
     }
     UnloadFont(fontTtf);
