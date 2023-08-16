@@ -75,15 +75,21 @@ bool ShowLanguageSelectionScene() {
     int totalButtonsHeight = (buttonHeight + spacing) * MAX_LANGUAGES - spacing;
     int startY = (screenHeight - totalButtonsHeight) / 2;
 
+    InitAudioDevice();
+
+    Sound ding = LoadSound("sfx/ding.mp3");
+
     int selectedButton = 0;
     bool languageSelected = false;
 
     while (!WindowShouldClose() && !languageSelected) {
-        if (IsGamepadButtonDown(gamepad, GAMEPAD_BUTTON_LEFT_FACE_DOWN) || IsKeyPressed(KEY_DOWN)) {
+        if (IsGamepadButtonDown(gamepad, GAMEPAD_BUTTON_LEFT_FACE_DOWN) || IsKeyPressed(KEY_DOWN)) {;
             selectedButton = (selectedButton + 1) % MAX_LANGUAGES;
+            PlaySound(ding);
         }
         else if (IsGamepadButtonDown(gamepad, GAMEPAD_BUTTON_LEFT_FACE_UP) || IsKeyPressed(KEY_UP)) {
             selectedButton = (selectedButton - 1 + MAX_LANGUAGES) % MAX_LANGUAGES;
+            PlaySound(ding);
         }
 
         Vector2 mousePosition = GetMousePosition();
@@ -111,6 +117,7 @@ bool ShowLanguageSelectionScene() {
         }
         EndDrawing();
     }
+    UnloadSound(ding);
 }
 
 bool ShowExitConfirmation() {
@@ -164,6 +171,7 @@ int main() {
     Texture2D xnupp = LoadTexture("pilt/cross1.png");
     Font fontTtf = LoadFontEx("fondid/MAIAN.TTF", 72, 0, 250);
     Font fontTtf1 = LoadFontEx("fondid/CHILLER.TTF", 100, 0, 250);
+    Music muusika = LoadMusicStream("muusika/esialgne.mp3");
 
     Rectangle imageRect = { GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height,
                             static_cast<float>(xnupp.width), static_cast<float>(xnupp.height) };
@@ -180,6 +188,9 @@ int main() {
             exitWindow = ShowExitConfirmation();
             exitWindowRequested = false;
         }
+
+        UpdateMusicStream(muusika);
+        PlayMusicStream(muusika);
 
         BeginDrawing();
         ClearBackground(WHITE);
@@ -206,6 +217,8 @@ int main() {
     }
     UnloadFont(fontTtf);
     UnloadFont(fontTtf1);
+    UnloadMusicStream(muusika);
+    CloseAudioDevice();
     CloseWindow();
     return 0;
 }
