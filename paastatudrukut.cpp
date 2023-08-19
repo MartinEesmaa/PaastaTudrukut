@@ -10,7 +10,7 @@ const char* languageNames[MAX_LANGUAGES] = {
     "English",
 };
 
-const char* textStrings[MAX_LANGUAGES][12] = {
+const char* textStrings[MAX_LANGUAGES][13] = {
     {
         "Päästa tüdrukut",
         "Alusta mäng",
@@ -24,6 +24,7 @@ const char* textStrings[MAX_LANGUAGES][12] = {
         "Keel",
         "Heledus",
         "Vali tegelane",
+        "Vajuta S klõhvu, et jätkada vahele",
     },
     {
         "Save the Girl",
@@ -38,6 +39,7 @@ const char* textStrings[MAX_LANGUAGES][12] = {
         "Language",
         "Brightness",
         "Choose character",
+        "Press S to skip the cutscene",
     },
 };
 
@@ -189,6 +191,9 @@ int main() {
             exitWindowRequested = false;
         }
 
+        Rectangle ristkulik1 = { 350.0f, 150.0f, 600.0f, 100.0f };
+        Rectangle ristkulik2 = { 350.0f, 300.0f, 600.0f, 100.0f };
+
         UpdateMusicStream(muusika);
         PlayMusicStream(muusika);
 
@@ -198,8 +203,8 @@ int main() {
         DrawTextEx(fontTtf, GetText(1), (Vector2) { 475.0f, 160.0f }, (float)fontTtf.baseSize, 2, BLACK);
         DrawTextEx(fontTtf, GetText(4), (Vector2) { 550.0f, 315.0f }, (float)fontTtf.baseSize, 2, BLACK);
         DrawTextEx(fontTtf, GetText(2), (Vector2) { GetScreenWidth() / 45.0f, GetScreenHeight() / 1.1f }, (float)fontTtf.baseSize, 2, BLACK);
-        DrawRectangleLines(350, 150, 600, 100, BLACK);
-        DrawRectangleLines(350, 300, 600, 100, BLACK);
+        DrawRectangleRoundedLines(ristkulik1, 1, 0, 10, BLACK);
+        DrawRectangleRoundedLines(ristkulik2, 1, 0, 10, BLACK);
         DrawTexture(xnupp, GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height, WHITE);
         DrawCircle(GetScreenWidth() - 50, GetScreenHeight() - 50, 30, BLACK);
 
