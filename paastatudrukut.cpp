@@ -171,6 +171,7 @@ int main() {
     bool exitWindow = false;
 
     Texture2D xnupp = LoadTexture("pilt/cross1.png");
+    Texture2D taust = LoadTexture("pilt/taust.png");
     Font fontTtf = LoadFontEx("fondid/MAIAN.TTF", 72, 0, 250);
     Font fontTtf1 = LoadFontEx("fondid/CHILLER.TTF", 100, 0, 250);
     Music muusika = LoadMusicStream("muusika/esialgne.mp3");
@@ -199,6 +200,9 @@ int main() {
 
         BeginDrawing();
         ClearBackground(WHITE);
+        DrawTexture(taust, 0, 0, WHITE);
+        DrawRectangleRounded(ristkulik1, 1, 0, WHITE);
+        DrawRectangleRounded(ristkulik2, 1, 0, WHITE);
         DrawTextEx(fontTtf1, GetText(0), (Vector2) { 400.0f, 45.0f }, (float)fontTtf1.baseSize, 10, BLACK);
         DrawTextEx(fontTtf, GetText(1), (Vector2) { 475.0f, 160.0f }, (float)fontTtf.baseSize, 2, BLACK);
         DrawTextEx(fontTtf, GetText(4), (Vector2) { 550.0f, 315.0f }, (float)fontTtf.baseSize, 2, BLACK);
@@ -223,6 +227,8 @@ int main() {
     UnloadFont(fontTtf);
     UnloadFont(fontTtf1);
     UnloadMusicStream(muusika);
+    UnloadTexture(xnupp);
+    UnloadTexture(taust);
     CloseAudioDevice();
     CloseWindow();
     return 0;
