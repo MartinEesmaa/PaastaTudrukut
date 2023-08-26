@@ -10,7 +10,7 @@ const char* languageNames[MAX_LANGUAGES] = {
     "English",
 };
 
-const char* textStrings[MAX_LANGUAGES][13] = {
+const char* textStrings[MAX_LANGUAGES][14] = {
     {
         "Päästa tüdrukut",
         "Alusta mäng",
@@ -25,6 +25,7 @@ const char* textStrings[MAX_LANGUAGES][13] = {
         "Heledus",
         "Vali tegelane",
         "Vajuta S klõhvu, et jätkada vahele",
+        "Tagasi",
     },
     {
         "Save the Girl",
@@ -40,6 +41,7 @@ const char* textStrings[MAX_LANGUAGES][13] = {
         "Brightness",
         "Choose character",
         "Press S to skip the cutscene",
+        "Back",
     },
 };
 
@@ -85,7 +87,7 @@ bool ShowLanguageSelectionScene() {
     bool languageSelected = false;
 
     while (!WindowShouldClose() && !languageSelected) {
-        if (IsGamepadButtonDown(gamepad, GAMEPAD_BUTTON_LEFT_FACE_DOWN) || IsKeyPressed(KEY_DOWN)) {;
+        if (IsGamepadButtonDown(gamepad, GAMEPAD_BUTTON_LEFT_FACE_DOWN) || IsKeyPressed(KEY_DOWN)) {
             selectedButton = (selectedButton + 1) % MAX_LANGUAGES;
             PlaySound(ding);
         }
@@ -154,6 +156,33 @@ bool ValiTegelane() {
     }
 }
 
+bool Tased() {
+    while (!WindowShouldClose())
+    {
+        Texture2D tasetaust = LoadTexture("pilt/tasetaust.png");
+        Font britanic = LoadFontEx("fondid/BRITANIC.TTF", 100, 0, 250);
+        
+        Rectangle tagasinupp = { 75, 45, 200, 70 };
+        
+        BeginDrawing();
+        ClearBackground(WHITE);
+        DrawTexture(tasetaust, 0, 0, WHITE);
+        DrawTextEx(britanic, GetText(4), (Vector2) { 475.0f, 45.0f }, britanic.baseSize, 10, BLACK);
+        DrawRectangleRec(tagasinupp, ORANGE);
+        DrawTriangle((Vector2) { 75, 45 }, (Vector2) { 75, 45 }, (Vector2) { 75, 45 }, ORANGE);
+        DrawTextEx(britanic, GetText(13), (Vector2) { 85.0f, 45.0f }, 60, 1, BLACK);
+
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), tagasinupp))
+        {
+            return 0;
+        }
+
+        EndDrawing();
+        UnloadTexture(tasetaust);
+        UnloadFont(britanic);
+    }
+}
+
 int main() {
     int screenWidth = 1280;
     int screenHeight = 720;
@@ -176,8 +205,23 @@ int main() {
     Font fontTtf1 = LoadFontEx("fondid/CHILLER.TTF", 100, 0, 250);
     Music muusika = LoadMusicStream("muusika/esialgne.mp3");
 
-    Rectangle imageRect = { GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height,
+    Image heli1 = LoadImage("pilt/helijavaikne.png");
+    Texture2D heli = LoadTextureFromImage(heli1);
+    UnloadImage(heli1);
+
+#define NUMBRI_FRAAMI 2
+
+    float frameHeight = (float)heli.height / NUMBRI_FRAAMI;
+    Rectangle heliRec = { GetScreenWidth() / 1.06f - heli.width, GetScreenHeight() / 1.01f, (float)heli.width, frameHeight };
+    Rectangle helibounds = { GetScreenWidth() / 1.06f - heli.width, GetScreenHeight() / 1.01f - heli.height / NUMBRI_FRAAMI / 1.01f, (float)heli.width, frameHeight };
+
+    Rectangle imageRect = { GetScreenWidth() - xnupp.width, GetScreenHeight() / 12.0f - xnupp.height,
                             static_cast<float>(xnupp.width), static_cast<float>(xnupp.height) };
+    Rectangle imageRect1 = { GetScreenWidth() - heli.width, GetScreenHeight() / 12.0f - heli.width,
+                            static_cast<float>(heli.width), static_cast<float>(heli.height) };
+
+    int nuppHeli = 0;
+    bool nuppHelivajutanud = false;
 
     while (!exitWindow) {
         if (IsKeyPressed(KEY_SPACE)) {
@@ -198,6 +242,8 @@ int main() {
         UpdateMusicStream(muusika);
         PlayMusicStream(muusika);
 
+        bool paus = false;
+
         BeginDrawing();
         ClearBackground(WHITE);
         DrawTexture(taust, 0, 0, WHITE);
@@ -210,6 +256,7 @@ int main() {
         DrawRectangleRoundedLines(ristkulik1, 1, 0, 10, BLACK);
         DrawRectangleRoundedLines(ristkulik2, 1, 0, 10, BLACK);
         DrawTexture(xnupp, GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height, WHITE);
+        //DrawTextureRec(heli, heliRec, (Vector2) { helibounds.x, helibounds.y }, WHITE);
         DrawCircle(GetScreenWidth() - 50, GetScreenHeight() - 50, 30, BLACK);
 
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) &&
@@ -218,10 +265,37 @@ int main() {
             exitWindowRequested = true;
         }
 
-	if (IsKeyPressed(KEY_O))
-	{
-		ValiTegelane();
-	}
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) &&
+            CheckCollisionPointRec(GetMousePosition(), helibounds))
+        {
+            nuppHeli = 1;
+            nuppHelivajutanud = true;
+
+            if (nuppHelivajutanud)
+            {
+                if (paus)
+                {
+                    PauseMusicStream(muusika);
+                }
+                else
+                {
+                    ResumeMusicStream(muusika);
+                    nuppHeli = 0;
+                }
+            }
+            paus = !paus;
+        }
+        heliRec.y = nuppHeli * frameHeight;
+
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), ristkulik1))
+        {
+            ValiTegelane();
+        }
+
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), ristkulik2))
+        {
+            Tased();
+        }
         EndDrawing();
     }
     UnloadFont(fontTtf);
@@ -229,6 +303,7 @@ int main() {
     UnloadMusicStream(muusika);
     UnloadTexture(xnupp);
     UnloadTexture(taust);
+    UnloadTexture(heli);
     CloseAudioDevice();
     CloseWindow();
     return 0;
