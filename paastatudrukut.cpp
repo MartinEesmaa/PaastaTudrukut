@@ -163,6 +163,16 @@ bool Tased() {
         Font britanic = LoadFontEx("fondid/BRITANIC.TTF", 100, 0, 250);
         
         Rectangle tagasinupp = { 75, 45, 200, 70 };
+        Rectangle esitase = { 212.5, 200, 150, 150 };
+        Rectangle teinetase = { 390, 200, 150, 150 };
+        Rectangle kolmtase = { 590, 200, 150, 150 };
+        Rectangle nelitase = { 790, 200, 150, 150 };
+        Rectangle viistase = { 990, 200, 150, 150 };
+        Rectangle kuustase = { 212.5, 400, 150, 150 };
+        Rectangle seitstase = { 390, 400, 150, 150 };
+        Rectangle kahetase = { 590, 400, 150, 150 };
+        Rectangle uhektase = { 790, 400, 150, 150 };
+        Rectangle kummtase = { 990, 400, 150, 150 };
         
         BeginDrawing();
         ClearBackground(WHITE);
@@ -170,7 +180,37 @@ bool Tased() {
         DrawTextEx(britanic, GetText(4), (Vector2) { 475.0f, 45.0f }, britanic.baseSize, 10, BLACK);
         DrawRectangleRec(tagasinupp, ORANGE);
         DrawTriangle((Vector2) { 75, 45 }, (Vector2) { 75, 45 }, (Vector2) { 75, 45 }, ORANGE);
-        DrawTextEx(britanic, GetText(13), (Vector2) { 85.0f, 45.0f }, 60, 1, BLACK);
+        DrawTextEx(britanic, GetText(13), (Vector2) { 100.0f, 45.0f }, 60, 1, WHITE);
+        DrawRectangleLinesEx(esitase, 15, BLACK);
+        DrawRectangleGradientH(225, 215, 125, 125, GREEN, LIME);
+        DrawTextEx(britanic, "1", (Vector2) { 240, 200 }, 150, 0, BLACK);
+        DrawRectangleLinesEx(teinetase, 15, BLACK);
+        DrawRectangleGradientH(400, 215, 125, 125, DARKGREEN, LIME);
+        DrawTextEx(britanic, "2", (Vector2) { 415, 200 }, 150, 0, BLACK);
+        DrawRectangleLinesEx(kolmtase, 15, BLACK);
+        DrawRectangleGradientH(600, 215, 125, 125, GREEN, DARKGREEN);
+        DrawTextEx(britanic, "3", (Vector2) { 615, 200 }, 150, 0, BLACK);
+        DrawRectangleLinesEx(nelitase, 15, BLACK);
+        DrawRectangleGradientH(800, 215, 125, 125, GREEN, YELLOW);
+        DrawTextEx(britanic, "4", (Vector2) { 815, 200 }, 150, 0, BLACK);
+        DrawRectangleLinesEx(viistase, 15, BLACK);
+        DrawRectangleGradientH(1000, 215, 125, 125, YELLOW, ORANGE);
+        DrawTextEx(britanic, "5", (Vector2) { 1015, 200 }, 150, 0, BLACK);
+        DrawRectangleGradientH(225, 415, 125, 125, ORANGE, BROWN);
+        DrawRectangleLinesEx(kuustase, 15, BLACK);
+        DrawTextEx(britanic, "6", (Vector2) { 240, 400 }, 150, 0, BLACK);
+        DrawRectangleGradientH(400, 415, 125, 125, BROWN, DARKBROWN);
+        DrawRectangleLinesEx(seitstase, 15, BLACK);
+        DrawTextEx(britanic, "7", (Vector2) { 415, 400 }, 150, 0, BLACK);
+        DrawRectangleGradientH(600, 415, 125, 125, DARKBROWN, MAROON);
+        DrawRectangleLinesEx(kahetase, 15, BLACK);
+        DrawTextEx(britanic, "8", (Vector2) { 615, 400 }, 150, 0, BLACK);
+        DrawRectangleGradientH(800, 415, 125, 125, MAROON, RED);
+        DrawRectangleLinesEx(uhektase, 15, BLACK);
+        DrawTextEx(britanic, "9", (Vector2) { 815, 400 }, 150, 0, BLACK);
+        DrawRectangleLinesEx(kummtase, 15, BLACK);
+        DrawRectangleGradientH(1000, 415, 125, 125, RED, BLACK);
+        DrawTextEx(britanic, "10", (Vector2) { 1000, 425 }, 100, 0, BLACK);
 
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), tagasinupp))
         {
@@ -200,6 +240,7 @@ int main() {
     bool exitWindow = false;
 
     Texture2D xnupp = LoadTexture("pilt/cross1.png");
+    Texture2D abi = LoadTexture("pilt/help1.png");
     Texture2D taust = LoadTexture("pilt/taust.png");
     Font fontTtf = LoadFontEx("fondid/MAIAN.TTF", 72, 0, 250);
     Font fontTtf1 = LoadFontEx("fondid/CHILLER.TTF", 100, 0, 250);
@@ -256,6 +297,7 @@ int main() {
         DrawRectangleRoundedLines(ristkulik1, 1, 0, 10, BLACK);
         DrawRectangleRoundedLines(ristkulik2, 1, 0, 10, BLACK);
         DrawTexture(xnupp, GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height, WHITE);
+        DrawTexture(abi, 0, 0, WHITE);
         //DrawTextureRec(heli, heliRec, (Vector2) { helibounds.x, helibounds.y }, WHITE);
         DrawCircle(GetScreenWidth() - 50, GetScreenHeight() - 50, 30, BLACK);
 
@@ -303,6 +345,7 @@ int main() {
     UnloadMusicStream(muusika);
     UnloadTexture(xnupp);
     UnloadTexture(taust);
+    UnloadTexture(abi);
     UnloadTexture(heli);
     CloseAudioDevice();
     CloseWindow();
