@@ -10,7 +10,7 @@ const char* languageNames[MAX_LANGUAGES] = {
     "English",
 };
 
-const char* textStrings[MAX_LANGUAGES][14] = {
+const char* textStrings[MAX_LANGUAGES][17] = {
     {
         "Päästa tüdrukut",
         "Alusta mäng",
@@ -26,6 +26,9 @@ const char* textStrings[MAX_LANGUAGES][14] = {
         "Vali tegelane",
         "Vajuta S klõhvu, et jätkada vahele",
         "Tagasi",
+        "Kuidas mängida mängu?",
+        "Enne kui sa alustad mängima, sul on vaja klaviatuuril või juhtmed, et mängida arvutis.",
+        "Klahvid:",
     },
     {
         "Save the Girl",
@@ -42,6 +45,9 @@ const char* textStrings[MAX_LANGUAGES][14] = {
         "Choose character",
         "Press S to skip the cutscene",
         "Back",
+        "How to play the game?",
+        "Before you play the game, you need keyboard or controller to play in computer.",
+        "Keys:",
     },
 };
 
@@ -223,6 +229,95 @@ bool Tased() {
     }
 }
 
+bool AlustaMangija()
+{           
+        Texture2D mangija = LoadTexture("pilt/mangija.png");
+        //Texture2D huppa = LoadTexture("");
+        //Texture2D vasak = LoadTexture("");
+        //Texture2D parem = LoadTexture("");
+
+        Music alusta = LoadMusicStream("muusika/mangu.mp3");
+        Sound huppamine = LoadSound("sfx/362328__jofae__platform-jump.mp3");
+
+        Vector2 positsioon = { (float)20.0f, GetScreenHeight() - (float)400.0f };
+
+        float kiirus = 25.0f;
+
+        bool pause = false;
+
+        while (!WindowShouldClose())
+        {
+            BeginDrawing();
+            ClearBackground(WHITE);
+            DrawTextureV(mangija, positsioon, WHITE);
+            UpdateMusicStream(alusta);
+            PlayMusicStream(alusta);
+
+            if (IsKeyPressed(KEY_W))
+            {
+                //DrawTexture(huppa, 0, GetScreenHeight() - 2, WHITE);
+                PlaySound(huppamine);
+            }
+
+            if (IsKeyDown(KEY_DOWN || KEY_S))
+            {
+
+            }
+
+            if (IsKeyDown(KEY_LEFT || KEY_A))
+            {
+
+            }
+
+            if (IsKeyDown(KEY_RIGHT || KEY_D))
+            {
+                positsioon.x += kiirus * GetFrameTime();
+            }
+
+            if (IsKeyPressed(KEY_P || KEY_SPACE)) pause = !pause;
+
+            if (!pause)
+            {
+                
+            }
+
+            EndDrawing();
+        }
+        UnloadTexture(mangija);
+        UnloadMusicStream(alusta);
+        UnloadSound(huppamine);
+        return 0;
+}
+
+bool Abiekraan()
+{
+    while (!WindowShouldClose())
+    {
+        Rectangle tagasinupp = { 75, 45, 200, 70 };
+
+        Font GLECB = LoadFontEx("fondid/GLECB.TTF", 72, 0, 100);
+
+        BeginDrawing();
+        ClearBackground(WHITE);
+        DrawTextEx(GLECB, GetText(14), (Vector2) { GetScreenWidth() / 3, GetScreenHeight() / 8 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(15), (Vector2) { GetScreenWidth() / 8, GetScreenHeight() / 4 }, 48, 0, BLACK);
+        DrawTextEx(GLECB, GetText(16), (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 50 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "W", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 100 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "A", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 150 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "S", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 200 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "D", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 250 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "P", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 300 }, GLECB.baseSize, 0, BLACK);
+        DrawRectangleRec(tagasinupp, ORANGE);
+
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), tagasinupp))
+        {
+            return 0;
+        }
+
+        EndDrawing();
+    }
+}
+
 int main() {
     int screenWidth = 1280;
     int screenHeight = 720;
@@ -264,6 +359,8 @@ int main() {
     int nuppHeli = 0;
     bool nuppHelivajutanud = false;
 
+    bool paus = false;
+
     while (!exitWindow) {
         if (IsKeyPressed(KEY_SPACE)) {
             ToggleFullScreenWindow(screenWidth, screenHeight);
@@ -279,11 +376,11 @@ int main() {
 
         Rectangle ristkulik1 = { 350.0f, 150.0f, 600.0f, 100.0f };
         Rectangle ristkulik2 = { 350.0f, 300.0f, 600.0f, 100.0f };
+        Rectangle abil = { 0, 0, 50, 50 };
 
         UpdateMusicStream(muusika);
         PlayMusicStream(muusika);
 
-        bool paus = false;
 
         BeginDrawing();
         ClearBackground(WHITE);
@@ -307,12 +404,13 @@ int main() {
             exitWindowRequested = true;
         }
 
-        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) &&
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && !nuppHelivajutanud && !paus &&
             CheckCollisionPointRec(GetMousePosition(), helibounds))
         {
             nuppHeli = 1;
             nuppHelivajutanud = true;
 
+            paus = !paus;
             if (nuppHelivajutanud)
             {
                 if (paus)
@@ -325,18 +423,22 @@ int main() {
                     nuppHeli = 0;
                 }
             }
-            paus = !paus;
         }
         heliRec.y = nuppHeli * frameHeight;
 
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), ristkulik1))
         {
-            ValiTegelane();
+            AlustaMangija();
         }
 
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), ristkulik2))
         {
             Tased();
+        }
+
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), abil))
+        {
+            Abiekraan();
         }
         EndDrawing();
     }
