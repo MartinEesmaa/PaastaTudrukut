@@ -10,7 +10,7 @@ const char* languageNames[MAX_LANGUAGES] = {
     "English",
 };
 
-const char* textStrings[MAX_LANGUAGES][17] = {
+const char* textStrings[MAX_LANGUAGES][24] = {
     {
         "Päästa tüdrukut",
         "Alusta mäng",
@@ -29,6 +29,13 @@ const char* textStrings[MAX_LANGUAGES][17] = {
         "Kuidas mängida mängu?",
         "Enne kui sa alustad mängima, sul on vaja klaviatuuril või juhtmed, et mängida arvutis.",
         "Klahvid:",
+        "Hüppa",
+        "Vasakule",
+        "Alla",
+        "Paremale",
+        "Paus",
+        "Punktid:",
+        "Tase:",
     },
     {
         "Save the Girl",
@@ -48,6 +55,13 @@ const char* textStrings[MAX_LANGUAGES][17] = {
         "How to play the game?",
         "Before you play the game, you need keyboard or controller to play in computer.",
         "Keys:",
+        "Jump",
+        "Left",
+        "Down",
+        "Right",
+        "Pause",
+        "Score:",
+        "Level:",
     },
 };
 
@@ -236,12 +250,20 @@ bool AlustaMangija()
         //Texture2D vasak = LoadTexture("");
         //Texture2D parem = LoadTexture("");
 
+        Image vaen1 = LoadImage("pilt/vaenlane.png");
+        ImageResize(&vaen1, 125, 125);
+        Texture2D vaen = LoadTextureFromImage(vaen1);
+        UnloadImage(vaen1);
+
+        Texture2D taust = LoadTexture("pilt/taust.png");
+
         Music alusta = LoadMusicStream("muusika/mangu.mp3");
         Sound huppamine = LoadSound("sfx/362328__jofae__platform-jump.mp3");
 
-        Vector2 positsioon = { (float)20.0f, GetScreenHeight() - (float)400.0f };
+        Vector2 positsioon = { 20.0f, GetScreenHeight() - 350.0f };
+        Vector2 vaensioon = { 20.0f, GetScreenHeight() - 200.0f };
 
-        float kiirus = 25.0f;
+        float kiirus = 200.0f;
 
         bool pause = false;
 
@@ -249,41 +271,52 @@ bool AlustaMangija()
         {
             BeginDrawing();
             ClearBackground(WHITE);
+            DrawTexture(taust, 0, 0, WHITE);
             DrawTextureV(mangija, positsioon, WHITE);
+            DrawTextureV(vaen, vaensioon, WHITE);
+            DrawText(GetText(22), 0, 0, 32, WHITE);
+            DrawText(GetText(23), GetScreenWidth() - 125, 0, 32, BLACK);
+            DrawText("1", GetScreenWidth() - 25, 0, 32, BLACK);
             UpdateMusicStream(alusta);
             PlayMusicStream(alusta);
 
-            if (IsKeyPressed(KEY_W))
+            if (IsKeyDown(KEY_W))
             {
-                //DrawTexture(huppa, 0, GetScreenHeight() - 2, WHITE);
-                PlaySound(huppamine);
+                positsioon.y -= kiirus * GetFrameTime();
             }
 
-            if (IsKeyDown(KEY_DOWN || KEY_S))
-            {
+            if (IsKeyPressed(KEY_W)) PlaySound(huppamine);
 
+            if (IsKeyDown(KEY_S))
+            {
+                positsioon.y += kiirus * GetFrameTime();
             }
 
-            if (IsKeyDown(KEY_LEFT || KEY_A))
+            if (IsKeyDown(KEY_A))
             {
-
+                positsioon.x -= kiirus * GetFrameTime();
             }
 
-            if (IsKeyDown(KEY_RIGHT || KEY_D))
+            if (IsKeyDown(KEY_D))
             {
                 positsioon.x += kiirus * GetFrameTime();
             }
 
-            if (IsKeyPressed(KEY_P || KEY_SPACE)) pause = !pause;
+            if (IsKeyPressed(KEY_P)) pause = !pause;
 
             if (!pause)
             {
-                
+                positsioon.x += 0;
+                positsioon.y += 0;
+                DrawText(GetText(21), 0, 0, 32, WHITE);
             }
+
+            vaensioon.x -= 1;
 
             EndDrawing();
         }
         UnloadTexture(mangija);
+        UnloadTexture(taust);
         UnloadMusicStream(alusta);
         UnloadSound(huppamine);
         return 0;
@@ -302,11 +335,16 @@ bool Abiekraan()
         DrawTextEx(GLECB, GetText(14), (Vector2) { GetScreenWidth() / 3, GetScreenHeight() / 8 }, GLECB.baseSize, 0, BLACK);
         DrawTextEx(GLECB, GetText(15), (Vector2) { GetScreenWidth() / 8, GetScreenHeight() / 4 }, 48, 0, BLACK);
         DrawTextEx(GLECB, GetText(16), (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 50 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, "W", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 100 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, "A", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 150 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, "S", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 200 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, "D", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 250 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, "P", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 300 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "W -", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 100 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "A -", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 150 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "S -", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 200 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "D -", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 250 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "P -", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 300 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(17), (Vector2) { GetScreenWidth() / 2.25 + 75, GetScreenHeight() / 4 + 100 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(18), (Vector2) { GetScreenWidth() / 2.25 + 75, GetScreenHeight() / 4 + 150 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(19), (Vector2) { GetScreenWidth() / 2.25 + 75, GetScreenHeight() / 4 + 200 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(20), (Vector2) { GetScreenWidth() / 2.25 + 75, GetScreenHeight() / 4 + 250 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(21), (Vector2) { GetScreenWidth() / 2.25 + 75, GetScreenHeight() / 4 + 300 }, GLECB.baseSize, 0, BLACK);
         DrawRectangleRec(tagasinupp, ORANGE);
 
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), tagasinupp))
@@ -315,6 +353,7 @@ bool Abiekraan()
         }
 
         EndDrawing();
+        UnloadFont(GLECB);
     }
 }
 
@@ -340,6 +379,21 @@ int main() {
     Font fontTtf = LoadFontEx("fondid/MAIAN.TTF", 72, 0, 250);
     Font fontTtf1 = LoadFontEx("fondid/CHILLER.TTF", 100, 0, 250);
     Music muusika = LoadMusicStream("muusika/esialgne.mp3");
+
+    Image taht1 = LoadImage("pilt/taht.png");
+    ImageResize(&taht1, 70, 70);
+    Texture2D taht = LoadTextureFromImage(taht1);
+    UnloadImage(taht1);
+
+    Image joon1 = LoadImage("pilt/joon.png");
+    ImageResize(&joon1, 275, 24);
+    Texture2D joon = LoadTextureFromImage(joon1);
+    UnloadImage(joon1);
+
+    Image suda1 = LoadImage("pilt/suda.png");
+    ImageResize(&suda1, 70, 70);
+    Texture2D suda = LoadTextureFromImage(suda1);
+    UnloadImage(suda1);
 
     Image heli1 = LoadImage("pilt/helijavaikne.png");
     Texture2D heli = LoadTextureFromImage(heli1);
@@ -381,10 +435,12 @@ int main() {
         UpdateMusicStream(muusika);
         PlayMusicStream(muusika);
 
-
         BeginDrawing();
         ClearBackground(WHITE);
         DrawTexture(taust, 0, 0, WHITE);
+        DrawTexture(taht, 590, 65, WHITE);
+        DrawTexture(joon, 650, 120, WHITE);
+        DrawTexture(suda, 900, 20, WHITE);
         DrawRectangleRounded(ristkulik1, 1, 0, WHITE);
         DrawRectangleRounded(ristkulik2, 1, 0, WHITE);
         DrawTextEx(fontTtf1, GetText(0), (Vector2) { 400.0f, 45.0f }, (float)fontTtf1.baseSize, 10, BLACK);
@@ -449,6 +505,9 @@ int main() {
     UnloadTexture(taust);
     UnloadTexture(abi);
     UnloadTexture(heli);
+    UnloadTexture(taht);
+    UnloadTexture(joon);
+    UnloadTexture(suda);
     CloseAudioDevice();
     CloseWindow();
     return 0;
