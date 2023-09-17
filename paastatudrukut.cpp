@@ -10,7 +10,7 @@ const char* languageNames[MAX_LANGUAGES] = {
     "English",
 };
 
-const char* textStrings[MAX_LANGUAGES][24] = {
+const char* textStrings[MAX_LANGUAGES][25] = {
     {
         "Päästa tüdrukut",
         "Alusta mäng",
@@ -36,6 +36,7 @@ const char* textStrings[MAX_LANGUAGES][24] = {
         "Paus",
         "Punktid:",
         "Tase:",
+        "Aeg jäänud: %.1f sekundid",
     },
     {
         "Save the Girl",
@@ -62,6 +63,7 @@ const char* textStrings[MAX_LANGUAGES][24] = {
         "Pause",
         "Score:",
         "Level:",
+        "Time Remaining: %.1f seconds",
     },
 };
 
@@ -261,14 +263,25 @@ bool AlustaMangija()
         Sound huppamine = LoadSound("sfx/362328__jofae__platform-jump.mp3");
 
         Vector2 positsioon = { 20.0f, GetScreenHeight() - 350.0f };
-        Vector2 vaensioon = { 20.0f, GetScreenHeight() - 200.0f };
+        Vector2 vaensioon = { 400.0f, GetScreenHeight() - 200.0f };
+
+        double alusAeg = GetTime();
+        double loppAeg = alusAeg + 180.0;
 
         float kiirus = 200.0f;
 
-        bool pause = false;
+        bool pause = true;
 
         while (!WindowShouldClose())
         {
+            double currentTime = GetTime();
+            double jaanuAeg = loppAeg - currentTime;
+
+            if (jaanuAeg <= 0) {
+                jaanuAeg = 0;
+                return 0;
+            }
+
             BeginDrawing();
             ClearBackground(WHITE);
             DrawTexture(taust, 0, 0, WHITE);
@@ -277,27 +290,29 @@ bool AlustaMangija()
             DrawText(GetText(22), 0, 0, 32, WHITE);
             DrawText(GetText(23), GetScreenWidth() - 125, 0, 32, BLACK);
             DrawText("1", GetScreenWidth() - 25, 0, 32, BLACK);
+            int tekstisuur = MeasureText(GetText(24), 32);
+            DrawText(TextFormat(GetText(24), jaanuAeg), GetScreenWidth() - tekstisuur - 20, 40, 32, BLACK);
             UpdateMusicStream(alusta);
             PlayMusicStream(alusta);
 
-            if (IsKeyDown(KEY_W))
+            if (IsKeyDown(KEY_W) && pause)
             {
                 positsioon.y -= kiirus * GetFrameTime();
             }
 
-            if (IsKeyPressed(KEY_W)) PlaySound(huppamine);
+            if (IsKeyPressed(KEY_W) && pause) PlaySound(huppamine);
 
-            if (IsKeyDown(KEY_S))
+            if (IsKeyDown(KEY_S) && pause)
             {
                 positsioon.y += kiirus * GetFrameTime();
             }
 
-            if (IsKeyDown(KEY_A))
+            if (IsKeyDown(KEY_A) && pause)
             {
                 positsioon.x -= kiirus * GetFrameTime();
             }
 
-            if (IsKeyDown(KEY_D))
+            if (IsKeyDown(KEY_D) && pause)
             {
                 positsioon.x += kiirus * GetFrameTime();
             }
@@ -306,12 +321,13 @@ bool AlustaMangija()
 
             if (!pause)
             {
+                PauseMusicStream(alusta);
                 positsioon.x += 0;
                 positsioon.y += 0;
-                DrawText(GetText(21), 0, 0, 32, WHITE);
+                vaensioon.x += 0;
+                DrawText(GetText(21), GetScreenWidth() / 2 + 100, GetScreenHeight() / 2 - 50, 48, WHITE);
             }
-
-            vaensioon.x -= 1;
+            else vaensioon.x -= 1;
 
             EndDrawing();
         }
