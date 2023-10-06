@@ -10,7 +10,7 @@ const char* languageNames[MAX_LANGUAGES] = {
     "English",
 };
 
-const char* textStrings[MAX_LANGUAGES][25] = {
+const char* textStrings[MAX_LANGUAGES][26] = {
     {
         "Päästa tüdrukut",
         "Alusta mäng",
@@ -37,6 +37,7 @@ const char* textStrings[MAX_LANGUAGES][25] = {
         "Punktid:",
         "Tase:",
         "Aeg jäänud: %.1f sekundid",
+        "Aeg lõppes",
     },
     {
         "Save the Girl",
@@ -64,6 +65,7 @@ const char* textStrings[MAX_LANGUAGES][25] = {
         "Score:",
         "Level:",
         "Time Remaining: %.1f seconds",
+        "Time's up!"
     },
 };
 
@@ -261,6 +263,7 @@ bool AlustaMangija()
 
         Music alusta = LoadMusicStream("muusika/mangu.mp3");
         Sound huppamine = LoadSound("sfx/362328__jofae__platform-jump.mp3");
+        Sound manglabi = LoadSound("sfx/495541__matrixxx__retro-death.wav");
 
         Vector2 positsioon = { 20.0f, GetScreenHeight() - 350.0f };
         Vector2 vaensioon = { 400.0f, GetScreenHeight() - 200.0f };
@@ -278,14 +281,23 @@ bool AlustaMangija()
             double jaanuAeg = loppAeg - currentTime;
 
             if (jaanuAeg <= 0) {
+                int sule = 0;
+                sule++;
                 jaanuAeg = 0;
+                positsioon.y += 500;
+                DrawText(GetText(25), GetScreenWidth() / 2 + 100, GetScreenHeight() / 2 - 50, 48, WHITE);
+                StopMusicStream(alusta);
+                PlaySound(manglabi);
                 return 0;
             }
 
             BeginDrawing();
             ClearBackground(WHITE);
             DrawTexture(taust, 0, 0, WHITE);
+            DrawRectangle(0, GetScreenHeight() - 50, GetScreenWidth(), 60, DARKBROWN);
+            DrawRectangle(0, GetScreenHeight() - 75, GetScreenWidth(), 40, LIME);
             DrawTextureV(mangija, positsioon, WHITE);
+            EndMode2D();
             DrawTextureV(vaen, vaensioon, WHITE);
             DrawText(GetText(22), 0, 0, 32, WHITE);
             DrawText(GetText(23), GetScreenWidth() - 125, 0, 32, BLACK);
@@ -335,6 +347,7 @@ bool AlustaMangija()
         UnloadTexture(taust);
         UnloadMusicStream(alusta);
         UnloadSound(huppamine);
+        UnloadSound(manglabi);
         return 0;
 }
 
@@ -362,6 +375,7 @@ bool Abiekraan()
         DrawTextEx(GLECB, GetText(20), (Vector2) { GetScreenWidth() / 2.25 + 75, GetScreenHeight() / 4 + 250 }, GLECB.baseSize, 0, BLACK);
         DrawTextEx(GLECB, GetText(21), (Vector2) { GetScreenWidth() / 2.25 + 75, GetScreenHeight() / 4 + 300 }, GLECB.baseSize, 0, BLACK);
         DrawRectangleRec(tagasinupp, ORANGE);
+        DrawTextEx(GLECB, GetText(13), (Vector2) { 125, 45 }, GLECB.baseSize, 0, BLACK);
 
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), tagasinupp))
         {
