@@ -181,11 +181,10 @@ bool ValiTegelane() {
 }
 
 bool Tased() {
+    Texture2D tasetaust = LoadTexture("pilt/tasetaust.png");
+    Font britanic = LoadFontEx("fondid/BRITANIC.TTF", 100, 0, 250);
     while (!WindowShouldClose())
-    {
-        Texture2D tasetaust = LoadTexture("pilt/tasetaust.png");
-        Font britanic = LoadFontEx("fondid/BRITANIC.TTF", 100, 0, 250);
-        
+    {   
         Rectangle tagasinupp = { 75, 45, 200, 70 };
         Rectangle esitase = { 212.5, 200, 150, 150 };
         Rectangle teinetase = { 390, 200, 150, 150 };
@@ -238,12 +237,12 @@ bool Tased() {
 
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), tagasinupp))
         {
+            UnloadTexture(tasetaust);
+            UnloadFont(britanic);
             return 0;
         }
 
         EndDrawing();
-        UnloadTexture(tasetaust);
-        UnloadFont(britanic);
     }
 }
 
@@ -353,11 +352,10 @@ bool AlustaMangija()
 
 bool Abiekraan()
 {
+    Font GLECB = LoadFontEx("fondid/GLECB.TTF", 72, 0, 100);
     while (!WindowShouldClose())
     {
         Rectangle tagasinupp = { 75, 45, 200, 70 };
-
-        Font GLECB = LoadFontEx("fondid/GLECB.TTF", 72, 0, 100);
 
         BeginDrawing();
         ClearBackground(WHITE);
@@ -379,11 +377,11 @@ bool Abiekraan()
 
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), tagasinupp))
         {
+            UnloadFont(GLECB);
             return 0;
         }
 
         EndDrawing();
-        UnloadFont(GLECB);
     }
 }
 
