@@ -258,6 +258,16 @@ bool AlustaMangija()
         Texture2D vaen = LoadTextureFromImage(vaen1);
         UnloadImage(vaen1);
 
+        Image mund1 = LoadImage("pilt/ring.png");
+        ImageResize(&mund1, 128, 128);
+        Texture2D mund = LoadTextureFromImage(mund1);
+        UnloadImage(mund1);
+
+        Image ruut1 = LoadImage("pilt/ruut.png");
+        ImageResize(&ruut1, 128, 128);
+        Texture2D ruut = LoadTextureFromImage(ruut1);
+        UnloadImage(ruut1);
+
         Texture2D taust = LoadTexture("pilt/taust.png");
 
         Music alusta = LoadMusicStream("muusika/mangu.mp3");
@@ -282,7 +292,6 @@ bool AlustaMangija()
             if (jaanuAeg <= 0) {
                 int sule = 0;
                 sule++;
-                jaanuAeg = 0;
                 positsioon.y += 500;
                 DrawText(GetText(25), GetScreenWidth() / 2 + 100, GetScreenHeight() / 2 - 50, 48, WHITE);
                 StopMusicStream(alusta);
@@ -298,6 +307,12 @@ bool AlustaMangija()
             DrawTextureV(mangija, positsioon, WHITE);
             EndMode2D();
             DrawTextureV(vaen, vaensioon, WHITE);
+            DrawTexture(ruut, 200, GetScreenHeight() - 400 - ruut.height, WHITE);
+            DrawTexture(ruut, 200 + ruut.width, GetScreenHeight() - 400 - ruut.height, WHITE);
+            DrawTexture(ruut, 200 + ruut.width * 2, GetScreenHeight() - 400 - ruut.height, WHITE);
+            DrawTexture(mund, 200, GetScreenHeight() - 550 - mund.height, WHITE);
+            DrawTexture(mund, 200 + mund.width, GetScreenHeight() - 550 - mund.height, WHITE);
+            DrawTexture(mund, 200 + mund.width * 2, GetScreenHeight() - 550 - mund.height, WHITE);
             DrawText(GetText(22), 0, 0, 32, WHITE);
             DrawText(GetText(23), GetScreenWidth() - 125, 0, 32, BLACK);
             DrawText("1", GetScreenWidth() - 25, 0, 32, BLACK);
@@ -344,6 +359,8 @@ bool AlustaMangija()
         }
         UnloadTexture(mangija);
         UnloadTexture(taust);
+        UnloadTexture(mund);
+        UnloadTexture(ruut);
         UnloadMusicStream(alusta);
         UnloadSound(huppamine);
         UnloadSound(manglabi);
