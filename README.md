@@ -6,6 +6,17 @@ Päästa tüdrukut mäng, tehtud Raylib-is C++ koodi.
 
 Enne kui ma hakkan ehitama mängu, ma kasutan Raylib koos C++ koodi teha mänguprogrammi rakendus.
 
+## Süsteemi nõuded mängida
+
+Süsteem nõud:
+
+Komponent | Miinimumnõuded
+--- | ---
+OS (operatsioon süsteem) | Windows XP ja hiljem, Mac OS, Linux, Android ja muud toetused.
+RAM (mälu) | 64 MB+
+GPU (videograafika) | OpenGL 1.1+
+Andmed | 16 MB+
+
 ## Näide ekraanpilt mängust:
 
 ![ekraanpilt.png](ekraanpilt.png)
