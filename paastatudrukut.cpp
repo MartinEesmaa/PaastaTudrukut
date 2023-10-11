@@ -305,7 +305,6 @@ bool AlustaMangija()
             DrawRectangle(0, GetScreenHeight() - 50, GetScreenWidth(), 60, DARKBROWN);
             DrawRectangle(0, GetScreenHeight() - 75, GetScreenWidth(), 40, LIME);
             DrawTextureV(mangija, positsioon, WHITE);
-            EndMode2D();
             DrawTextureV(vaen, vaensioon, WHITE);
             DrawTexture(ruut, 200, GetScreenHeight() - 400 - ruut.height, WHITE);
             DrawTexture(ruut, 200 + ruut.width, GetScreenHeight() - 400 - ruut.height, WHITE);
@@ -410,10 +409,7 @@ int main() {
     SetWindowState(FLAG_VSYNC_HINT);
     SetTargetFPS(60);
 
-    if (ShowLanguageSelectionScene()) {
-        CloseWindow();
-        return 0;
-    }
+    ShowLanguageSelectionScene();
 
     bool exitWindowRequested = false;
     bool exitWindow = false;
