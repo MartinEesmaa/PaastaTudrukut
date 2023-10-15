@@ -276,6 +276,10 @@ bool AlustaMangija()
 
         Vector2 positsioon = { 20.0f, GetScreenHeight() - 350.0f };
         Vector2 vaensioon = { 400.0f, GetScreenHeight() - 200.0f };
+        Vector2 manguLiik = { 0.0f, GetScreenHeight() - 350.0f };
+        float raskus = 800.0f;
+        float huppaKesk = 400.0f;
+        bool kasHuppa = false;
 
         double alusAeg = GetTime();
         double loppAeg = alusAeg + 180.0;
@@ -283,6 +287,7 @@ bool AlustaMangija()
         float kiirus = 200.0f;
 
         bool pause = true;
+        bool kasVaenAktiiv = true;
 
         while (!WindowShouldClose())
         {
@@ -296,7 +301,39 @@ bool AlustaMangija()
                 DrawText(GetText(25), GetScreenWidth() / 2 + 100, GetScreenHeight() / 2 - 50, 48, WHITE);
                 StopMusicStream(alusta);
                 PlaySound(manglabi);
+                UnloadTexture(mangija);
+                UnloadTexture(taust);
+                UnloadTexture(mund);
+                UnloadTexture(ruut);
+                UnloadMusicStream(alusta);
+                UnloadSound(huppamine);
                 return 0;
+            }
+
+            if (kasVaenAktiiv && CheckCollisionRecs(
+                (Rectangle) {
+                positsioon.x, positsioon.y, mangija.width, mangija.height
+            },
+                (Rectangle) {
+                vaensioon.x, vaensioon.y, vaen.width, vaen.height
+            }))
+            {
+                if (positsioon.y < vaensioon.y)
+                {
+                    kasVaenAktiiv = false;
+                }
+                else
+                {
+
+                }
+            }
+
+            if (!kasVaenAktiiv)
+            {
+                vaensioon.x = -vaen.width;
+            }
+            else
+            {
             }
 
             BeginDrawing();
@@ -320,9 +357,17 @@ bool AlustaMangija()
             UpdateMusicStream(alusta);
             PlayMusicStream(alusta);
 
-            if (IsKeyDown(KEY_W) && pause)
+            if (positsioon.y >= GetScreenHeight() - 350.0f)
             {
-                positsioon.y -= kiirus * GetFrameTime();
+                positsioon.y = GetScreenHeight() - 350.0f;
+                manguLiik.y = 0.0f;
+                kasHuppa = false;
+            }
+
+            if (IsKeyDown(KEY_W) && pause && !kasHuppa)
+            {
+                manguLiik.y = -huppaKesk;
+                kasHuppa = true;
             }
 
             if (IsKeyPressed(KEY_W) && pause) PlaySound(huppamine);
@@ -353,6 +398,10 @@ bool AlustaMangija()
                 DrawText(GetText(21), GetScreenWidth() / 2 + 100, GetScreenHeight() / 2 - 50, 48, WHITE);
             }
             else vaensioon.x -= 1;
+
+            manguLiik.y += raskus * GetFrameTime();
+            positsioon.x += manguLiik.x * GetFrameTime();
+            positsioon.y += manguLiik.y * GetFrameTime();
 
             EndDrawing();
         }
