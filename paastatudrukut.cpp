@@ -248,37 +248,54 @@ bool Tased() {
 
 bool AlustaMangija()
 {           
-        Texture2D mangija = LoadTexture("pilt/mangija.png");
+        Image mangija1 = LoadImage("pilt/mangija.png");
+        ImageResize(&mangija1, 32, 64);
+        Texture2D mangija = LoadTextureFromImage(mangija1);
+        UnloadImage(mangija1);
         //Texture2D huppa = LoadTexture("");
         //Texture2D vasak = LoadTexture("");
         //Texture2D parem = LoadTexture("");
 
         Image vaen1 = LoadImage("pilt/vaenlane.png");
-        ImageResize(&vaen1, 125, 125);
+        ImageResize(&vaen1, 32, 32);
         Texture2D vaen = LoadTextureFromImage(vaen1);
         UnloadImage(vaen1);
 
         Image mund1 = LoadImage("pilt/ring.png");
-        ImageResize(&mund1, 128, 128);
+        ImageResize(&mund1, 32, 32);
         Texture2D mund = LoadTextureFromImage(mund1);
         UnloadImage(mund1);
 
         Image ruut1 = LoadImage("pilt/ruut.png");
-        ImageResize(&ruut1, 128, 128);
+        ImageResize(&ruut1, 32, 32);
         Texture2D ruut = LoadTextureFromImage(ruut1);
         UnloadImage(ruut1);
+
+        Image platvorm1 = LoadImage("pilt/platvorm.png");
+        ImageResize(&platvorm1, 100, 22);
+        Texture2D platvorm = LoadTextureFromImage(platvorm1);
+        UnloadImage(platvorm1);
+
+        Image finislipp1 = LoadImage("pilt/finislipp.png");
+        ImageResize(&finislipp1, 64, 128);
+        Texture2D finislipp = LoadTextureFromImage(finislipp1);
+        UnloadImage(finislipp1);
 
         Texture2D taust = LoadTexture("pilt/taust.png");
 
         Music alusta = LoadMusicStream("muusika/mangu.mp3");
         Sound huppamine = LoadSound("sfx/362328__jofae__platform-jump.mp3");
         Sound manglabi = LoadSound("sfx/495541__matrixxx__retro-death.wav");
+        Sound lohutud = LoadSound("sfx/506546__matrixxx__pop-01.wav");
+        Sound klapsu = LoadSound("sfx/209792__alterr__applause-mono-24bit-48khz.wav");
 
-        Vector2 positsioon = { 20.0f, GetScreenHeight() - 350.0f };
-        Vector2 vaensioon = { 400.0f, GetScreenHeight() - 200.0f };
-        Vector2 manguLiik = { 0.0f, GetScreenHeight() - 350.0f };
-        float raskus = 800.0f;
-        float huppaKesk = 400.0f;
+        Vector2 positsioon = { 20.0f, GetScreenHeight() - 100.0f };
+        Vector2 vaensioon = { 400.0f, GetScreenHeight() - 75.0f };
+        Vector2 manguLiik = { 0.0f, GetScreenHeight() - 100.0f};
+        Vector2 finislippPos = { GetScreenWidth() - 100, GetScreenHeight() - 160 };
+        Vector2 platvormPos = { 450, GetScreenHeight() - 225 };
+        float raskus = 1600.0f;
+        float huppaKesk = 800.0f;
         bool kasHuppa = false;
 
         double alusAeg = GetTime();
@@ -288,6 +305,11 @@ bool AlustaMangija()
 
         bool pause = true;
         bool kasVaenAktiiv = true;
+        bool finisloppu = true;
+
+        float autoKiirus = 100.0f;
+        float platvormKiirus = 100.0f;
+        bool liiguParemale = true;
 
         while (!WindowShouldClose())
         {
@@ -305,7 +327,11 @@ bool AlustaMangija()
                 UnloadTexture(taust);
                 UnloadTexture(mund);
                 UnloadTexture(ruut);
+                UnloadTexture(platvorm);
+                UnloadTexture(finislipp);
                 UnloadMusicStream(alusta);
+                UnloadSound(lohutud);
+                UnloadSound(klapsu);
                 UnloadSound(huppamine);
                 return 0;
             }
@@ -336,19 +362,51 @@ bool AlustaMangija()
             {
             }
 
+            if (finisloppu && CheckCollisionRecs(
+                (Rectangle) {
+                positsioon.x, positsioon.y, mangija.width, mangija.height
+            },
+                (Rectangle) {
+                finislippPos.x, finislippPos.y, finislipp.width, finislipp.height
+            }))
+            {
+                if (positsioon.y < finislippPos.y)
+                {
+                    finisloppu = false;
+                }
+                else
+                {
+
+                }
+            }
+
+            if (!finisloppu)
+            {
+                PlaySound(klapsu);
+            }
+            else
+            {
+            }
+
             BeginDrawing();
             ClearBackground(WHITE);
             DrawTexture(taust, 0, 0, WHITE);
-            DrawRectangle(0, GetScreenHeight() - 50, GetScreenWidth(), 60, DARKBROWN);
-            DrawRectangle(0, GetScreenHeight() - 75, GetScreenWidth(), 40, LIME);
+            DrawRectangle(0, GetScreenHeight() - 25, GetScreenWidth() / 2 - 140, 30, DARKBROWN);
+            DrawRectangle(0, GetScreenHeight() - 40, GetScreenWidth() / 2 - 140, 30, LIME);
+            DrawRectangle(GetScreenWidth() - 580, GetScreenHeight() - 25, GetScreenWidth() / 2 - 50, 30, DARKBROWN);
+            DrawRectangle(GetScreenWidth() - 580, GetScreenHeight() - 40, GetScreenWidth() / 2 - 50, 30, LIME);
             DrawTextureV(mangija, positsioon, WHITE);
             DrawTextureV(vaen, vaensioon, WHITE);
-            DrawTexture(ruut, 200, GetScreenHeight() - 400 - ruut.height, WHITE);
-            DrawTexture(ruut, 200 + ruut.width, GetScreenHeight() - 400 - ruut.height, WHITE);
-            DrawTexture(ruut, 200 + ruut.width * 2, GetScreenHeight() - 400 - ruut.height, WHITE);
-            DrawTexture(mund, 200, GetScreenHeight() - 550 - mund.height, WHITE);
-            DrawTexture(mund, 200 + mund.width, GetScreenHeight() - 550 - mund.height, WHITE);
-            DrawTexture(mund, 200 + mund.width * 2, GetScreenHeight() - 550 - mund.height, WHITE);
+            DrawTexture(ruut, 200, GetScreenHeight() - 150 - ruut.height, WHITE);
+            DrawTexture(ruut, 200 + ruut.width, GetScreenHeight() - 150 - ruut.height, WHITE);
+            DrawTexture(ruut, 200 + ruut.width * 2, GetScreenHeight() - 150 - ruut.height, WHITE);
+            DrawTexture(mund, 200, GetScreenHeight() - 200 - mund.height, WHITE);
+            DrawTexture(mund, 200 + mund.width, GetScreenHeight() - 200 - mund.height, WHITE);
+            DrawTexture(mund, 200 + mund.width * 2, GetScreenHeight() - 200 - mund.height, WHITE);
+            DrawRectangle(400, GetScreenHeight() - 190, 100, 150, MAROON);
+            DrawRectangle(400 * 1.75, GetScreenHeight() - 190, 100, 150, MAROON);
+            DrawTexture(platvorm, platvormPos.x, platvormPos.y, WHITE);
+            DrawTexture(finislipp, finislippPos.x, finislippPos.y, WHITE);
             DrawText(GetText(22), 0, 0, 32, WHITE);
             DrawText(GetText(23), GetScreenWidth() - 125, 0, 32, BLACK);
             DrawText("1", GetScreenWidth() - 25, 0, 32, BLACK);
@@ -357,9 +415,9 @@ bool AlustaMangija()
             UpdateMusicStream(alusta);
             PlayMusicStream(alusta);
 
-            if (positsioon.y >= GetScreenHeight() - 350.0f)
+            if (positsioon.y >= GetScreenHeight() - 100.0f)
             {
-                positsioon.y = GetScreenHeight() - 350.0f;
+                positsioon.y = GetScreenHeight() - 100.0f;
                 manguLiik.y = 0.0f;
                 kasHuppa = false;
             }
@@ -399,6 +457,23 @@ bool AlustaMangija()
             }
             else vaensioon.x -= 1;
 
+            if (liiguParemale)
+            {
+                platvormPos.x += platvormKiirus * GetFrameTime();
+                if (platvormPos.x >= 600)
+                {
+                    liiguParemale = false;
+                }
+            }
+            else
+            {
+                platvormPos.x -= platvormKiirus * GetFrameTime();
+                if (platvormPos.x <= 450)
+                {
+                    liiguParemale = true;
+                }
+            }
+
             manguLiik.y += raskus * GetFrameTime();
             positsioon.x += manguLiik.x * GetFrameTime();
             positsioon.y += manguLiik.y * GetFrameTime();
@@ -409,7 +484,11 @@ bool AlustaMangija()
         UnloadTexture(taust);
         UnloadTexture(mund);
         UnloadTexture(ruut);
+        UnloadTexture(platvorm);
+        UnloadTexture(finislipp);
         UnloadMusicStream(alusta);
+        UnloadSound(lohutud);
+        UnloadSound(klapsu);
         UnloadSound(huppamine);
         UnloadSound(manglabi);
         return 0;
