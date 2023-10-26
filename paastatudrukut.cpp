@@ -10,7 +10,7 @@ const char* languageNames[MAX_LANGUAGES] = {
     "English",
 };
 
-const char* textStrings[MAX_LANGUAGES][26] = {
+const char* textStrings[MAX_LANGUAGES][30] = {
     {
         "Päästa tüdrukut",
         "Alusta mäng",
@@ -38,6 +38,10 @@ const char* textStrings[MAX_LANGUAGES][26] = {
         "Tase:",
         "Aeg jäänud: %.1f sekundid",
         "Aeg lõppes",
+        "Krediidid",
+        "Tehtud, kujundatud & programmeeritud:",
+        "Muusika:",
+        "Hääle effektid kasutatud freesound.org veebil"
     },
     {
         "Save the Girl",
@@ -65,7 +69,11 @@ const char* textStrings[MAX_LANGUAGES][26] = {
         "Score:",
         "Level:",
         "Time Remaining: %.1f seconds",
-        "Time's up!"
+        "Time's up!",
+        "Credits",
+        "Created, designed & developed:",
+        "Music:",
+        "Sound effects used at freesound.org",
     },
 };
 
@@ -247,7 +255,9 @@ bool Tased() {
 }
 
 bool AlustaMangija()
-{           
+{       
+        typedef enum ManguEkraan { TASE1 = 0, TASE2 } ManguEkraan;
+
         Image mangija1 = LoadImage("pilt/mangija.png");
         ImageResize(&mangija1, 32, 64);
         Texture2D mangija = LoadTextureFromImage(mangija1);
@@ -260,6 +270,11 @@ bool AlustaMangija()
         ImageResize(&vaen1, 32, 32);
         Texture2D vaen = LoadTextureFromImage(vaen1);
         UnloadImage(vaen1);
+
+        Image vaen2 = LoadImage("pilt/slimo.png");
+        ImageResize(&vaen2, 32, 64);
+        Texture2D slimo = LoadTextureFromImage(vaen2);
+        UnloadImage(vaen2);
 
         Image mund1 = LoadImage("pilt/ring.png");
         ImageResize(&mund1, 32, 32);
@@ -311,8 +326,23 @@ bool AlustaMangija()
         float platvormKiirus = 100.0f;
         bool liiguParemale = true;
 
+        ManguEkraan vaikneEkraan = TASE1;
+
         while (!WindowShouldClose())
         {
+            switch (vaikneEkraan)
+            {
+                case TASE1:
+                {
+                    if (!finisloppu) vaikneEkraan = TASE2;
+                } break;
+                case TASE2:
+                {
+
+                } break;
+                default: break;
+            }
+
             double currentTime = GetTime();
             double jaanuAeg = loppAeg - currentTime;
 
@@ -329,6 +359,8 @@ bool AlustaMangija()
                 UnloadTexture(ruut);
                 UnloadTexture(platvorm);
                 UnloadTexture(finislipp);
+                UnloadTexture(vaen);
+                UnloadTexture(slimo);
                 UnloadMusicStream(alusta);
                 UnloadSound(lohutud);
                 UnloadSound(klapsu);
@@ -370,7 +402,7 @@ bool AlustaMangija()
                 finislippPos.x, finislippPos.y, finislipp.width, finislipp.height
             }))
             {
-                if (positsioon.y < finislippPos.y)
+                if (positsioon.x < finislippPos.x)
                 {
                     finisloppu = false;
                 }
@@ -380,40 +412,66 @@ bool AlustaMangija()
                 }
             }
 
-            if (!finisloppu)
-            {
-                PlaySound(klapsu);
-            }
-            else
-            {
-            }
-
             BeginDrawing();
             ClearBackground(WHITE);
-            DrawTexture(taust, 0, 0, WHITE);
-            DrawRectangle(0, GetScreenHeight() - 25, GetScreenWidth() / 2 - 140, 30, DARKBROWN);
-            DrawRectangle(0, GetScreenHeight() - 40, GetScreenWidth() / 2 - 140, 30, LIME);
-            DrawRectangle(GetScreenWidth() - 580, GetScreenHeight() - 25, GetScreenWidth() / 2 - 50, 30, DARKBROWN);
-            DrawRectangle(GetScreenWidth() - 580, GetScreenHeight() - 40, GetScreenWidth() / 2 - 50, 30, LIME);
-            DrawTextureV(mangija, positsioon, WHITE);
-            DrawTextureV(vaen, vaensioon, WHITE);
-            DrawTexture(ruut, 200, GetScreenHeight() - 150 - ruut.height, WHITE);
-            DrawTexture(ruut, 200 + ruut.width, GetScreenHeight() - 150 - ruut.height, WHITE);
-            DrawTexture(ruut, 200 + ruut.width * 2, GetScreenHeight() - 150 - ruut.height, WHITE);
-            DrawTexture(mund, 200, GetScreenHeight() - 200 - mund.height, WHITE);
-            DrawTexture(mund, 200 + mund.width, GetScreenHeight() - 200 - mund.height, WHITE);
-            DrawTexture(mund, 200 + mund.width * 2, GetScreenHeight() - 200 - mund.height, WHITE);
-            DrawRectangle(400, GetScreenHeight() - 190, 100, 150, MAROON);
-            DrawRectangle(400 * 1.75, GetScreenHeight() - 190, 100, 150, MAROON);
-            DrawTexture(platvorm, platvormPos.x, platvormPos.y, WHITE);
-            DrawTexture(finislipp, finislippPos.x, finislippPos.y, WHITE);
-            DrawText(GetText(22), 0, 0, 32, WHITE);
-            DrawText(GetText(23), GetScreenWidth() - 125, 0, 32, BLACK);
-            DrawText("1", GetScreenWidth() - 25, 0, 32, BLACK);
-            int tekstisuur = MeasureText(GetText(24), 32);
-            DrawText(TextFormat(GetText(24), jaanuAeg), GetScreenWidth() - tekstisuur - 20, 40, 32, BLACK);
-            UpdateMusicStream(alusta);
-            PlayMusicStream(alusta);
+
+            switch (vaikneEkraan)
+            {
+                case TASE1:
+                {
+                    DrawTexture(taust, 0, 0, WHITE);
+                    DrawRectangle(0, GetScreenHeight() - 25, GetScreenWidth() / 2 - 140, 30, DARKBROWN);
+                    DrawRectangle(0, GetScreenHeight() - 40, GetScreenWidth() / 2 - 140, 30, LIME);
+                    DrawRectangle(GetScreenWidth() - 580, GetScreenHeight() - 25, GetScreenWidth() / 2 - 50, 30, DARKBROWN);
+                    DrawRectangle(GetScreenWidth() - 580, GetScreenHeight() - 40, GetScreenWidth() / 2 - 50, 30, LIME);
+                    DrawTextureV(mangija, positsioon, WHITE);
+                    DrawTextureV(vaen, vaensioon, WHITE);
+                    DrawTexture(ruut, 200, GetScreenHeight() - 150 - ruut.height, WHITE);
+                    DrawTexture(ruut, 200 + ruut.width, GetScreenHeight() - 150 - ruut.height, WHITE);
+                    DrawTexture(ruut, 200 + ruut.width * 2, GetScreenHeight() - 150 - ruut.height, WHITE);
+                    DrawTexture(mund, 200, GetScreenHeight() - 200 - mund.height, WHITE);
+                    DrawTexture(mund, 200 + mund.width, GetScreenHeight() - 200 - mund.height, WHITE);
+                    DrawTexture(mund, 200 + mund.width * 2, GetScreenHeight() - 200 - mund.height, WHITE);
+                    DrawRectangle(400, GetScreenHeight() - 190, 100, 150, MAROON);
+                    DrawRectangle(400 * 1.75, GetScreenHeight() - 190, 100, 150, MAROON);
+                    DrawTexture(platvorm, platvormPos.x, platvormPos.y, WHITE);
+                    DrawTexture(finislipp, finislippPos.x, finislippPos.y, WHITE);
+                    DrawText(GetText(22), 0, 0, 32, WHITE);
+                    DrawText(GetText(23), GetScreenWidth() - 125, 0, 32, BLACK);
+                    DrawText("1", GetScreenWidth() - 25, 0, 32, BLACK);
+                    int tekstisuur = MeasureText(GetText(24), 32);
+                    DrawText(TextFormat(GetText(24), jaanuAeg), GetScreenWidth() - tekstisuur - 20, 40, 32, BLACK);
+                    UpdateMusicStream(alusta);
+                    PlayMusicStream(alusta);
+                } break;
+                case TASE2:
+                {
+                    DrawTexture(taust, 0, 0, WHITE);
+                    DrawTextureV(mangija, positsioon, WHITE);
+                    DrawTexture(finislipp, finislippPos.x, finislippPos.y, WHITE);
+                    DrawRectangle(0, GetScreenHeight() - 25, GetScreenWidth(), 30, DARKBROWN);
+                    DrawRectangle(0, GetScreenHeight() - 40, GetScreenWidth(), 30, LIME);
+                    DrawRectangle(200, GetScreenHeight() - 190, 30, 120, MAROON);
+                    DrawRectangle(200 * 2, GetScreenHeight() - 190, 30, 120, MAROON);
+                    DrawRectangle(200, GetScreenHeight() - 70, 230, 30, MAROON);
+                    DrawRectangle(600, GetScreenHeight() - 160, 40, 120, MAROON);
+                    DrawRectangle(640, GetScreenHeight() - 220, 40, 180, MAROON);
+                    DrawRectangle(680, GetScreenHeight() - 260, 40, 220, MAROON);
+                    DrawRectangle(720, GetScreenHeight() - 300, 40, 260, MAROON);
+                    DrawRectangle(760, GetScreenHeight() - 340, 40, 300, MAROON);
+                    DrawRectangle(800, GetScreenHeight() - 550, 40, 510, MAROON);
+                    DrawRectangle(500, 0, 40, 200, MAROON);
+                    DrawRectangle(500, 200, 120, 40, MAROON);
+                    DrawRectangle(800, GetScreenHeight() - 560, 400, 20, MAROON);
+                    DrawRectangle(1000, GetScreenHeight() - 450, 280, 20, MAROON);
+                    DrawText(GetText(22), 0, 0, 32, WHITE);
+                    DrawText(GetText(23), GetScreenWidth() - 125, 0, 32, BLACK);
+                    DrawText("2", GetScreenWidth() - 25, 0, 32, BLACK);
+                    int tekstisuur = MeasureText(GetText(24), 32);
+                    DrawText(TextFormat(GetText(24), jaanuAeg), GetScreenWidth() - tekstisuur - 20, 40, 32, BLACK);
+                } break;
+                default: break;
+            }
 
             if (positsioon.y >= GetScreenHeight() - 100.0f)
             {
@@ -486,12 +544,40 @@ bool AlustaMangija()
         UnloadTexture(ruut);
         UnloadTexture(platvorm);
         UnloadTexture(finislipp);
+        UnloadTexture(vaen);
+        UnloadTexture(slimo);
         UnloadMusicStream(alusta);
         UnloadSound(lohutud);
         UnloadSound(klapsu);
         UnloadSound(huppamine);
         UnloadSound(manglabi);
         return 0;
+}
+
+bool Krediidid()
+{
+    Texture2D taust = LoadTexture("pilt/taust.png");
+    Font fontTtf = LoadFontEx("fondid/MAIAN.TTF", 72, 0, 250);
+    while (!WindowShouldClose())
+    {
+        Rectangle tagasinupp = { 75, 45, 200, 70 };
+
+        BeginDrawing();
+        ClearBackground(WHITE);
+        DrawTexture(taust, 0, 0, WHITE);
+        DrawRectangleRec(tagasinupp, ORANGE);
+        DrawTextEx(fontTtf, GetText(13), (Vector2) { 125, 45 }, fontTtf.baseSize, 0, BLACK);
+        DrawTextEx(fontTtf, GetText(26), (Vector2) { 550.0f, 45.0f }, fontTtf.baseSize, 0, WHITE);
+        DrawTextEx(fontTtf, GetText(27), (Vector2) { 300.0f, 100.0f }, fontTtf.baseSize, 0, WHITE);
+        DrawText("Martin Eesmaa", 450, 160, fontTtf.baseSize, WHITE);
+        DrawTextEx(fontTtf, GetText(28), (Vector2) { 300.0f, 240.0f }, fontTtf.baseSize, 0, WHITE);
+        DrawText("Kevin Macleod", 450, 325, fontTtf.baseSize, WHITE);
+        DrawTextEx(fontTtf, GetText(29), (Vector2) { 300.0f, 450.0f }, fontTtf.baseSize, 0, WHITE);
+        EndDrawing();
+    }
+    UnloadTexture(taust);
+    UnloadFont(fontTtf);
+    return 0;
 }
 
 bool Abiekraan()
@@ -600,6 +686,7 @@ int main() {
         Rectangle ristkulik1 = { 350.0f, 150.0f, 600.0f, 100.0f };
         Rectangle ristkulik2 = { 350.0f, 300.0f, 600.0f, 100.0f };
         Rectangle abil = { 0, 0, 50, 50 };
+        Rectangle krediid = { GetScreenWidth() - 250, GetScreenHeight() - 75, 250, 75 };
 
         UpdateMusicStream(muusika);
         PlayMusicStream(muusika);
@@ -621,7 +708,7 @@ int main() {
         DrawTexture(xnupp, GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height, WHITE);
         DrawTexture(abi, 0, 0, WHITE);
         //DrawTextureRec(heli, heliRec, (Vector2) { helibounds.x, helibounds.y }, WHITE);
-        DrawCircle(GetScreenWidth() - 50, GetScreenHeight() - 50, 30, BLACK);
+        DrawTextEx(fontTtf, GetText(26), (Vector2) { GetScreenWidth() - 250, GetScreenHeight() - 75 }, fontTtf.baseSize, 0, BLACK);
 
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) &&
             CheckCollisionPointRec(GetMousePosition(), imageRect))
@@ -665,6 +752,14 @@ int main() {
         {
             Abiekraan();
         }
+
+        if (IsGamepadButtonReleased(gamepad, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)) AlustaMangija();
+
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), krediid))
+        {
+            Krediidid();
+        }
+
         EndDrawing();
     }
     UnloadFont(fontTtf);
