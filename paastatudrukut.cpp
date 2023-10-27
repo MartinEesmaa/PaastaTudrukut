@@ -96,11 +96,6 @@ void ToggleFullScreenWindow(int windowWidth, int windowHeight) {
     }
 }
 
-bool MyCheckCollisionPointRec(Vector2 point, Rectangle rec) {
-    return (point.x >= rec.x && point.x <= (rec.x + rec.width) &&
-        point.y >= rec.y && point.y <= (rec.y + rec.height));
-}
-
 bool ShowLanguageSelectionScene() {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
@@ -128,14 +123,12 @@ bool ShowLanguageSelectionScene() {
             PlaySound(ding);
         }
 
-        Vector2 mousePosition = GetMousePosition();
-
         BeginDrawing();
         ClearBackground(WHITE);
 
         for (int i = 0; i < MAX_LANGUAGES; ++i) {
             int buttonY = startY + i * (buttonHeight + spacing);
-            Rectangle buttonRect = { (screenWidth - buttonWidth) / 2, buttonY, buttonWidth, buttonHeight };
+            Rectangle buttonRect = { ((float)screenWidth - (float)buttonWidth) / 2, (float)buttonY, (float)buttonWidth, (float)buttonHeight };
 
             if (i == selectedButton) {
                 DrawRectangleRec(buttonRect, LIGHTGRAY);
@@ -154,6 +147,7 @@ bool ShowLanguageSelectionScene() {
         EndDrawing();
     }
     UnloadSound(ding);
+    return 0;
 }
 
 bool ShowExitConfirmation() {
@@ -186,6 +180,7 @@ bool ValiTegelane() {
         DrawText(GetText(11), GetScreenWidth() / 4, GetScreenHeight() / 2, 30, BLACK);
         EndDrawing();
     }
+    return 0;
 }
 
 bool Tased() {
@@ -252,6 +247,9 @@ bool Tased() {
 
         EndDrawing();
     }
+    UnloadTexture(tasetaust);
+    UnloadFont(britanic);
+    return 0;
 }
 
 bool AlustaMangija()
@@ -307,8 +305,8 @@ bool AlustaMangija()
         Vector2 positsioon = { 20.0f, GetScreenHeight() - 100.0f };
         Vector2 vaensioon = { 400.0f, GetScreenHeight() - 75.0f };
         Vector2 manguLiik = { 0.0f, GetScreenHeight() - 100.0f};
-        Vector2 finislippPos = { GetScreenWidth() - 100, GetScreenHeight() - 160 };
-        Vector2 platvormPos = { 450, GetScreenHeight() - 225 };
+        Vector2 finislippPos = { GetScreenWidth() - 100.0f, GetScreenHeight() - 160.0f };
+        Vector2 platvormPos = { 450.0f, GetScreenHeight() - 225.0f };
         float raskus = 1600.0f;
         float huppaKesk = 800.0f;
         bool kasHuppa = false;
@@ -322,7 +320,6 @@ bool AlustaMangija()
         bool kasVaenAktiiv = true;
         bool finisloppu = true;
 
-        float autoKiirus = 100.0f;
         float platvormKiirus = 100.0f;
         bool liiguParemale = true;
 
@@ -347,8 +344,6 @@ bool AlustaMangija()
             double jaanuAeg = loppAeg - currentTime;
 
             if (jaanuAeg <= 0) {
-                int sule = 0;
-                sule++;
                 positsioon.y += 500;
                 DrawText(GetText(25), GetScreenWidth() / 2 + 100, GetScreenHeight() / 2 - 50, 48, WHITE);
                 StopMusicStream(alusta);
@@ -370,10 +365,10 @@ bool AlustaMangija()
 
             if (kasVaenAktiiv && CheckCollisionRecs(
                 (Rectangle) {
-                positsioon.x, positsioon.y, mangija.width, mangija.height
+                positsioon.x, positsioon.y, (float)mangija.width, (float)mangija.height
             },
                 (Rectangle) {
-                vaensioon.x, vaensioon.y, vaen.width, vaen.height
+                vaensioon.x, vaensioon.y, (float)vaen.width, (float)vaen.height
             }))
             {
                 if (positsioon.y < vaensioon.y)
@@ -396,10 +391,10 @@ bool AlustaMangija()
 
             if (finisloppu && CheckCollisionRecs(
                 (Rectangle) {
-                positsioon.x, positsioon.y, mangija.width, mangija.height
+                positsioon.x, positsioon.y, (float)mangija.width, (float)mangija.height
             },
                 (Rectangle) {
-                finislippPos.x, finislippPos.y, finislipp.width, finislipp.height
+                finislippPos.x, finislippPos.y, (float)finislipp.width, (float)finislipp.height
             }))
             {
                 if (positsioon.x < finislippPos.x)
@@ -573,6 +568,14 @@ bool Krediidid()
         DrawTextEx(fontTtf, GetText(28), (Vector2) { 300.0f, 240.0f }, fontTtf.baseSize, 0, WHITE);
         DrawText("Kevin Macleod", 450, 325, fontTtf.baseSize, WHITE);
         DrawTextEx(fontTtf, GetText(29), (Vector2) { 300.0f, 450.0f }, fontTtf.baseSize, 0, WHITE);
+
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), tagasinupp))
+        {
+            UnloadTexture(taust);
+            UnloadFont(fontTtf);
+            return 0;
+        }
+
         EndDrawing();
     }
     UnloadTexture(taust);
@@ -589,19 +592,19 @@ bool Abiekraan()
 
         BeginDrawing();
         ClearBackground(WHITE);
-        DrawTextEx(GLECB, GetText(14), (Vector2) { GetScreenWidth() / 3, GetScreenHeight() / 8 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, GetText(15), (Vector2) { GetScreenWidth() / 8, GetScreenHeight() / 4 }, 48, 0, BLACK);
-        DrawTextEx(GLECB, GetText(16), (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 50 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, "W -", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 100 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, "A -", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 150 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, "S -", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 200 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, "D -", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 250 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, "P -", (Vector2) { GetScreenWidth() / 2.25, GetScreenHeight() / 4 + 300 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, GetText(17), (Vector2) { GetScreenWidth() / 2.25 + 75, GetScreenHeight() / 4 + 100 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, GetText(18), (Vector2) { GetScreenWidth() / 2.25 + 75, GetScreenHeight() / 4 + 150 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, GetText(19), (Vector2) { GetScreenWidth() / 2.25 + 75, GetScreenHeight() / 4 + 200 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, GetText(20), (Vector2) { GetScreenWidth() / 2.25 + 75, GetScreenHeight() / 4 + 250 }, GLECB.baseSize, 0, BLACK);
-        DrawTextEx(GLECB, GetText(21), (Vector2) { GetScreenWidth() / 2.25 + 75, GetScreenHeight() / 4 + 300 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(14), (Vector2) { GetScreenWidth() / 3.0f, GetScreenHeight() / 8.0f }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(15), (Vector2) { GetScreenWidth() / 8.0f, GetScreenHeight() / 4.0f }, 48, 0, BLACK);
+        DrawTextEx(GLECB, GetText(16), (Vector2) { GetScreenWidth() / 2.25f, GetScreenHeight() / 4.0f + 50.0f }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "W -", (Vector2) { GetScreenWidth() / 2.25f, GetScreenHeight() / 4.0f + 100 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "A -", (Vector2) { GetScreenWidth() / 2.25f, GetScreenHeight() / 4.0f + 150 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "S -", (Vector2) { GetScreenWidth() / 2.25f, GetScreenHeight() / 4.0f + 200 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "D -", (Vector2) { GetScreenWidth() / 2.25f, GetScreenHeight() / 4.0f + 250 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, "P -", (Vector2) { GetScreenWidth() / 2.25f, GetScreenHeight() / 4.0f + 300 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(17), (Vector2) { GetScreenWidth() / 2.25f + 75, GetScreenHeight() / 4.0f + 100 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(18), (Vector2) { GetScreenWidth() / 2.25f + 75, GetScreenHeight() / 4.0f + 150 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(19), (Vector2) { GetScreenWidth() / 2.25f + 75, GetScreenHeight() / 4.0f + 200 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(20), (Vector2) { GetScreenWidth() / 2.25f + 75, GetScreenHeight() / 4.0f + 250 }, GLECB.baseSize, 0, BLACK);
+        DrawTextEx(GLECB, GetText(21), (Vector2) { GetScreenWidth() / 2.25f + 75, GetScreenHeight() / 4.0f + 300 }, GLECB.baseSize, 0, BLACK);
         DrawRectangleRec(tagasinupp, ORANGE);
         DrawTextEx(GLECB, GetText(13), (Vector2) { 125, 45 }, GLECB.baseSize, 0, BLACK);
 
@@ -613,6 +616,8 @@ bool Abiekraan()
 
         EndDrawing();
     }
+    UnloadFont(GLECB);
+    return 0;
 }
 
 int main() {
@@ -660,9 +665,9 @@ int main() {
     Rectangle heliRec = { GetScreenWidth() / 1.06f - heli.width, GetScreenHeight() / 1.01f, (float)heli.width, frameHeight };
     Rectangle helibounds = { GetScreenWidth() / 1.06f - heli.width, GetScreenHeight() / 1.01f - heli.height / NUMBRI_FRAAMI / 1.01f, (float)heli.width, frameHeight };
 
-    Rectangle imageRect = { GetScreenWidth() - xnupp.width, GetScreenHeight() / 12.0f - xnupp.height,
+    Rectangle imageRect = { GetScreenWidth() - (float)xnupp.width, GetScreenHeight() / 12.0f - xnupp.height,
                             static_cast<float>(xnupp.width), static_cast<float>(xnupp.height) };
-    Rectangle imageRect1 = { GetScreenWidth() - heli.width, GetScreenHeight() / 12.0f - heli.width,
+    Rectangle imageRect1 = { GetScreenWidth() - (float)heli.width, GetScreenHeight() / 12.0f - heli.width,
                             static_cast<float>(heli.width), static_cast<float>(heli.height) };
 
     int nuppHeli = 0;
@@ -686,7 +691,7 @@ int main() {
         Rectangle ristkulik1 = { 350.0f, 150.0f, 600.0f, 100.0f };
         Rectangle ristkulik2 = { 350.0f, 300.0f, 600.0f, 100.0f };
         Rectangle abil = { 0, 0, 50, 50 };
-        Rectangle krediid = { GetScreenWidth() - 250, GetScreenHeight() - 75, 250, 75 };
+        Rectangle krediid = { GetScreenWidth() - 250.0f, GetScreenHeight() - 75.0f, 250, 75 };
 
         UpdateMusicStream(muusika);
         PlayMusicStream(muusika);
@@ -708,7 +713,7 @@ int main() {
         DrawTexture(xnupp, GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height, WHITE);
         DrawTexture(abi, 0, 0, WHITE);
         //DrawTextureRec(heli, heliRec, (Vector2) { helibounds.x, helibounds.y }, WHITE);
-        DrawTextEx(fontTtf, GetText(26), (Vector2) { GetScreenWidth() - 250, GetScreenHeight() - 75 }, fontTtf.baseSize, 0, BLACK);
+        DrawTextEx(fontTtf, GetText(26), (Vector2) { GetScreenWidth() - 250.0f, GetScreenHeight() - 75.0f }, fontTtf.baseSize, 0, BLACK);
 
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) &&
             CheckCollisionPointRec(GetMousePosition(), imageRect))
