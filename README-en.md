@@ -6,6 +6,8 @@ Save the Girl game, made in Raylib with C++ code.
 
 Before I start to build the game, I'm gonna use Raylib with C++ code to make game program.
 
+[Estonian language original version / Eesti keel originaal versioon](README.md)
+
 ## System requirements to play
 
 System requirements:

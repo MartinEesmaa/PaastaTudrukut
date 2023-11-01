@@ -6,6 +6,8 @@ Päästa tüdrukut mäng, tehtud Raylib-is C++ koodi.
 
 Enne kui ma hakkan ehitama mängu, ma kasutan Raylib koos C++ koodi teha mänguprogrammi rakendus.
 
+[Inglise keel versioon / English language version](README-en.md)
+
 ## Süsteemi nõuded mängida
 
 Süsteem nõud:
