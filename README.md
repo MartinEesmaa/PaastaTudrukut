@@ -15,9 +15,13 @@ Komponent | Miinimumnõuded
 OS (operatsioon süsteem) | Windows XP ja hiljem, Mac OS, Linux, Android ja muud toetused.
 RAM (mälu) | 64 MB+
 GPU (videograafika) | OpenGL 1.1+
-Andmed | 16 MB+
+Andmed | 32 MB+
 
-## Näide ekraanpilt mängust:
+## Näide vana ekraanpilt mängust:
+
+![vana-ekraanpilt.png](vana-ekraanpilt.png)
+
+## Näide uus ekraanpilt mängust:
 
 ![ekraanpilt.png](ekraanpilt.png)
 

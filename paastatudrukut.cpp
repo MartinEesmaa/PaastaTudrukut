@@ -481,7 +481,7 @@ bool AlustaMangija()
                 kasHuppa = true;
             }
 
-            if (IsKeyPressed(KEY_W) && pause) PlaySound(huppamine);
+            if (IsKeyPressed(KEY_W) || IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) && pause) PlaySound(huppamine);
 
             if (IsKeyDown(KEY_S) && pause)
             {
@@ -498,7 +498,7 @@ bool AlustaMangija()
                 positsioon.x += kiirus * GetFrameTime();
             }
 
-            if (IsKeyPressed(KEY_P)) pause = !pause;
+            if (IsKeyPressed(KEY_P) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)) pause = !pause;
 
             if (!pause)
             {
@@ -509,6 +509,22 @@ bool AlustaMangija()
                 DrawText(GetText(21), GetScreenWidth() / 2 + 100, GetScreenHeight() / 2 - 50, 48, WHITE);
             }
             else vaensioon.x -= 1;
+
+            if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) && pause && !kasHuppa)
+            {
+                manguLiik.y = -huppaKesk;
+                kasHuppa = true;
+            }
+
+            if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT) && pause)
+            {
+                positsioon.x -= kiirus * GetFrameTime();
+            }
+
+            if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT) && pause)
+            {
+                positsioon.x += kiirus * GetFrameTime();
+            }
 
             if (liiguParemale)
             {
@@ -707,7 +723,8 @@ int main() {
         DrawTextEx(fontTtf1, GetText(0), (Vector2) { 400.0f, 45.0f }, (float)fontTtf1.baseSize, 10, BLACK);
         DrawTextEx(fontTtf, GetText(1), (Vector2) { 475.0f, 160.0f }, (float)fontTtf.baseSize, 2, BLACK);
         DrawTextEx(fontTtf, GetText(4), (Vector2) { 550.0f, 315.0f }, (float)fontTtf.baseSize, 2, BLACK);
-        DrawTextEx(fontTtf, GetText(2), (Vector2) { GetScreenWidth() / 45.0f, GetScreenHeight() / 1.1f }, (float)fontTtf.baseSize, 2, BLACK);
+        DrawTextEx(fontTtf, GetText(2), (Vector2) { 0.0f, GetScreenHeight() / 1.1f }, (float)fontTtf.baseSize, 2, BLACK);
+        DrawTextEx(fontTtf, "v0.0.1", (Vector2) {0.0f, GetScreenHeight() / 1.2f}, fontTtf.baseSize, 0, BLACK);
         DrawRectangleRoundedLines(ristkulik1, 1, 0, 10, BLACK);
         DrawRectangleRoundedLines(ristkulik2, 1, 0, 10, BLACK);
         DrawTexture(xnupp, GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height, WHITE);
