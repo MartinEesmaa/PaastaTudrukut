@@ -203,8 +203,8 @@ bool Tased() {
         BeginDrawing();
         ClearBackground(WHITE);
         DrawTexture(tasetaust, 0, 0, WHITE);
-        DrawTextEx(britanic, GetText(4), (Vector2) { 475.0f, 45.0f }, britanic.baseSize, 10, BLACK);
         DrawRectangleRec(tagasinupp, ORANGE);
+        DrawTextEx(britanic, GetText(4), (Vector2) { 475.0f, 45.0f }, britanic.baseSize, 10, BLACK);
         DrawTriangle((Vector2) { 75, 45 }, (Vector2) { 75, 45 }, (Vector2) { 75, 45 }, ORANGE);
         DrawTextEx(britanic, GetText(13), (Vector2) { 100.0f, 45.0f }, 60, 1, WHITE);
         DrawRectangleLinesEx(esitase, 15, BLACK);
@@ -269,7 +269,7 @@ bool AlustaMangija()
         Texture2D vaen = LoadTextureFromImage(vaen1);
         UnloadImage(vaen1);
 
-        Image vaen2 = LoadImage("pilt/slimo.png");
+        Image vaen2 = LoadImage("pilt/Slimo.png");
         ImageResize(&vaen2, 32, 64);
         Texture2D slimo = LoadTextureFromImage(vaen2);
         UnloadImage(vaen2);
@@ -279,7 +279,7 @@ bool AlustaMangija()
         Texture2D mund = LoadTextureFromImage(mund1);
         UnloadImage(mund1);
 
-        Image ruut1 = LoadImage("pilt/ruut.png");
+        Image ruut1 = LoadImage("pilt/Ruut.png");
         ImageResize(&ruut1, 32, 32);
         Texture2D ruut = LoadTextureFromImage(ruut1);
         UnloadImage(ruut1);
@@ -289,7 +289,7 @@ bool AlustaMangija()
         Texture2D platvorm = LoadTextureFromImage(platvorm1);
         UnloadImage(platvorm1);
 
-        Image finislipp1 = LoadImage("pilt/finislipp.png");
+        Image finislipp1 = LoadImage("pilt/Finislipp.png");
         ImageResize(&finislipp1, 64, 128);
         Texture2D finislipp = LoadTextureFromImage(finislipp1);
         UnloadImage(finislipp1);
