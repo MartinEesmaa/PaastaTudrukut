@@ -10,7 +10,7 @@ const char* languageNames[MAX_LANGUAGES] = {
     "English",
 };
 
-const char* textStrings[MAX_LANGUAGES][30] = {
+const char* textStrings[MAX_LANGUAGES][33] = {
     {
         "Päästa tüdrukut",
         "Alusta mäng",
@@ -41,7 +41,10 @@ const char* textStrings[MAX_LANGUAGES][30] = {
         "Krediidid",
         "Tehtud, kujundatud & programmeeritud:",
         "Muusika:",
-        "Hääle effektid kasutatud freesound.org veebil"
+        "Hääle effektid kasutatud freesound.org veebil",
+        "Tase üks",
+        "Tase kaks",
+        "Abiekraan"
     },
     {
         "Save the Girl",
@@ -74,6 +77,9 @@ const char* textStrings[MAX_LANGUAGES][30] = {
         "Created, designed & developed:",
         "Music:",
         "Sound effects used at freesound.org",
+        "Level one",
+        "Level two",
+        "Help screen"
     },
 };
 
@@ -184,6 +190,7 @@ bool ValiTegelane() {
 }
 
 bool Tased() {
+    SetWindowTitle(GetText(4));
     Texture2D tasetaust = LoadTexture("pilt/tasetaust.png");
     Font britanic = LoadFontEx("fondid/BRITANIC.TTF", 100, 0, 250);
     while (!WindowShouldClose())
@@ -242,6 +249,7 @@ bool Tased() {
         {
             UnloadTexture(tasetaust);
             UnloadFont(britanic);
+            SetWindowTitle(GetText(0));
             return 0;
         }
 
@@ -249,6 +257,7 @@ bool Tased() {
     }
     UnloadTexture(tasetaust);
     UnloadFont(britanic);
+    SetWindowTitle(GetText(0));
     return 0;
 }
 
@@ -414,6 +423,7 @@ bool AlustaMangija()
             {
                 case TASE1:
                 {
+                    SetWindowTitle(GetText(30));
                     DrawTexture(taust, 0, 0, WHITE);
                     DrawRectangle(0, GetScreenHeight() - 25, GetScreenWidth() / 2 - 140, 30, DARKBROWN);
                     DrawRectangle(0, GetScreenHeight() - 40, GetScreenWidth() / 2 - 140, 30, LIME);
@@ -441,6 +451,7 @@ bool AlustaMangija()
                 } break;
                 case TASE2:
                 {
+                    SetWindowTitle(GetText(31));
                     DrawTexture(taust, 0, 0, WHITE);
                     DrawTextureV(mangija, positsioon, WHITE);
                     DrawTexture(finislipp, finislippPos.x, finislippPos.y, WHITE);
@@ -481,7 +492,7 @@ bool AlustaMangija()
                 kasHuppa = true;
             }
 
-            if (IsKeyPressed(KEY_W) || IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) && pause) PlaySound(huppamine);
+            if (IsKeyPressed(KEY_W) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) && pause) PlaySound(huppamine);
 
             if (IsKeyDown(KEY_S) && pause)
             {
@@ -562,11 +573,13 @@ bool AlustaMangija()
         UnloadSound(klapsu);
         UnloadSound(huppamine);
         UnloadSound(manglabi);
+        SetWindowTitle(GetText(0));
         return 0;
 }
 
 bool Krediidid()
 {
+    SetWindowTitle(GetText(26));
     Texture2D taust = LoadTexture("pilt/taust.png");
     Font fontTtf = LoadFontEx("fondid/MAIAN.TTF", 72, 0, 250);
     while (!WindowShouldClose())
@@ -589,6 +602,7 @@ bool Krediidid()
         {
             UnloadTexture(taust);
             UnloadFont(fontTtf);
+            SetWindowTitle(GetText(0));
             return 0;
         }
 
@@ -596,11 +610,13 @@ bool Krediidid()
     }
     UnloadTexture(taust);
     UnloadFont(fontTtf);
+    SetWindowTitle(GetText(0));
     return 0;
 }
 
 bool Abiekraan()
 {
+    SetWindowTitle(GetText(32));
     Font GLECB = LoadFontEx("fondid/GLECB.TTF", 72, 0, 100);
     while (!WindowShouldClose())
     {
@@ -627,12 +643,14 @@ bool Abiekraan()
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), tagasinupp))
         {
             UnloadFont(GLECB);
+            SetWindowTitle(GetText(0));
             return 0;
         }
 
         EndDrawing();
     }
     UnloadFont(GLECB);
+    SetWindowTitle(GetText(0));
     return 0;
 }
 
@@ -645,6 +663,7 @@ int main() {
     SetTargetFPS(60);
 
     ShowLanguageSelectionScene();
+    SetWindowTitle(GetText(0));
 
     bool exitWindowRequested = false;
     bool exitWindow = false;
