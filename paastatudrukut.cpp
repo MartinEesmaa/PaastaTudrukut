@@ -2,7 +2,7 @@
 #include <string.h>
 
 #ifdef __SWITCH__
-<include <switch.h>
+#include <switch.h>
 #endif
 
 #define MAX_LANGUAGES 2
