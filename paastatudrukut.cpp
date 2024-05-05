@@ -594,13 +594,13 @@ bool Krediidid()
         ClearBackground(WHITE);
         DrawTexture(taust, 0, 0, WHITE);
         DrawRectangleRec(tagasinupp, ORANGE);
-        DrawTextEx(fontTtf, GetText(13), (Vector2) { 125, 45 }, fontTtf.baseSize, 0, BLACK);
-        DrawTextEx(fontTtf, GetText(26), (Vector2) { 550.0f, 45.0f }, fontTtf.baseSize, 0, WHITE);
-        DrawTextEx(fontTtf, GetText(27), (Vector2) { 300.0f, 100.0f }, fontTtf.baseSize, 0, WHITE);
-        DrawText("Martin Eesmaa", 450, 160, fontTtf.baseSize, WHITE);
-        DrawTextEx(fontTtf, GetText(28), (Vector2) { 300.0f, 240.0f }, fontTtf.baseSize, 0, WHITE);
-        DrawText("Kevin Macleod", 450, 325, fontTtf.baseSize, WHITE);
-        DrawTextEx(fontTtf, GetText(29), (Vector2) { 300.0f, 450.0f }, fontTtf.baseSize, 0, WHITE);
+        DrawTextEx(fontTtf, GetText(13), (Vector2) { 100, 45 }, fontTtf.baseSize, 0, BLACK);
+        DrawTextEx(fontTtf, GetText(26), (Vector2) { 500.0f, 45.0f }, fontTtf.baseSize, 0, WHITE);
+        DrawTextEx(fontTtf, GetText(27), (Vector2) { 240.0f, 110.0f }, fontTtf.baseSize, 0, WHITE);
+        DrawText("Martin Eesmaa", 450, 200, fontTtf.baseSize, WHITE);
+        DrawTextEx(fontTtf, GetText(28), (Vector2) { 240.0f, 275.0f }, fontTtf.baseSize, 0, WHITE);
+        DrawText("Kevin Macleod", 450, 350, fontTtf.baseSize, WHITE);
+        DrawTextEx(fontTtf, GetText(29), (Vector2) { 100.0f, 450.0f }, fontTtf.baseSize, 0, WHITE);
 
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), tagasinupp))
         {
