@@ -11,7 +11,10 @@ modify_source_code() {
     cp -rf muusika/* romfailid
     cp -rf fondid/* romfailid
 
-    cp paastatudrukut.cpp paastatudrukut-varu.cpp
+    if [ ! -d "backup" ]; then
+        mkdir backup
+    fi
+    cp -rf paastatudrukut.cpp backup/paastatudrukut-varu.cpp
 
     sed -i 's|fondid/|romfs:/romfailid/|g' paastatudrukut.cpp
     sed -i 's|pilt/|romfs:/romfailid/|g' paastatudrukut.cpp
@@ -21,9 +24,10 @@ modify_source_code() {
 
 revert_source_code() {
     rm -rf romfailid
-    if [ -f paastatudrukut-varu.cpp ]; then
-        mv paastatudrukut-varu.cpp paastatudrukut.cpp
+    if [ -f backup/paastatudrukut-varu.cpp ]; then
+        mv backup/paastatudrukut-varu.cpp paastatudrukut.cpp
     fi
+    rm -rf backup
 }
 
 handle_cancel() {
