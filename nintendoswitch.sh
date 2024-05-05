@@ -2,32 +2,32 @@
 
 modify_source_code() {
 
-    if [ ! -d "romfailid" ]; then
-        mkdir romfailid
+    if [ ! -d "romfs" ]; then
+        mkdir romfs
     fi
 
-    cp -rf fondid/* romfailid
-    cp -rf pilt/* romfailid
-    cp -rf muusika/* romfailid
-    cp -rf fondid/* romfailid
+    cp -rf fondid romfs
+    cp -rf pilt romfs
+    cp -rf sfx romfs
+    cp -rf muusika romfs
 
-    if [ ! -d "backup" ]; then
-        mkdir backup
+    if [ ! -d "source" ]; then
+        mkdir source
     fi
-    cp -rf paastatudrukut.cpp backup/paastatudrukut-varu.cpp
+    cp paastatudrukut.cpp source/paastatudrukut.cpp
 
-    sed -i 's|fondid/|romfs:/romfailid/|g' paastatudrukut.cpp
-    sed -i 's|pilt/|romfs:/romfailid/|g' paastatudrukut.cpp
-    sed -i 's|sfx/|romfs:/romfailid/|g' paastatudrukut.cpp
-    sed -i 's|muusika/|romfs:/romfailid/|g' paastatudrukut.cpp
+    sed -i 's|fondid/|romfs:/fondid/|g' source/paastatudrukut.cpp
+    sed -i 's|pilt/|romfs:/pilt/|g' source/paastatudrukut.cpp
+    sed -i 's|sfx/|romfs:/sfx/|g' source/paastatudrukut.cpp
+    sed -i 's|muusika/|romfs:/muusika/|g' source/paastatudrukut.cpp
 }
 
 revert_source_code() {
-    rm -rf romfailid
-    if [ -f backup/paastatudrukut-varu.cpp ]; then
-        mv backup/paastatudrukut-varu.cpp paastatudrukut.cpp
+    rm -rf failid
+    if [ -f source/paastatudrukut.cpp ]; then
+        rm source/paastatudrukut.cpp
     fi
-    rm -rf backup
+    rm -rf source
 }
 
 handle_cancel() {
