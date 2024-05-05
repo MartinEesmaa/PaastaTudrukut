@@ -1,6 +1,10 @@
 #include "raylib.h"
 #include <string.h>
 
+#ifdef __SWITCH__
+<include <switch.h>
+#endif
+
 #define MAX_LANGUAGES 2
 #define LANGUAGE_ESTONIAN 0
 #define LANGUAGE_ENGLISH 1
