@@ -46,7 +46,7 @@ BUILD		:=	build
 SOURCES		:=	.
 DATA		:=	data
 INCLUDES	:=	include
-ROMFS		:=	${pilt,muusika,fondid,sfx}
+ROMFS		:=	romfailid
 
 #---------------------------------------------------------------------------------
 # options for code generation

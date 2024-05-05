@@ -1,17 +1,29 @@
 #!/bin/bash
 
 modify_source_code() {
-    sed -i 's|fondid/|romfs:/fondid/|g' paastatudrukut.cpp
-    sed -i 's|pilt/|romfs:/pilt/|g' paastatudrukut.cpp
-    sed -i 's|sfx/|romfs:/sfx/|g' paastatudrukut.cpp
-    sed -i 's|muusika/|romfs:/muusika/|g' paastatudrukut.cpp
+
+    if [ ! -d "romfailid" ]; then
+        mkdir romfailid
+    fi
+
+    cp -rf fondid/* romfailid
+    cp -rf pilt/* romfailid
+    cp -rf muusika/* romfailid
+    cp -rf fondid/* romfailid
+
+    cp paastatudrukut.cpp paastatudrukut-varu.cpp
+
+    sed -i 's|fondid/|romfs:/romfailid/|g' paastatudrukut.cpp
+    sed -i 's|pilt/|romfs:/romfailid/|g' paastatudrukut.cpp
+    sed -i 's|sfx/|romfs:/romfailid/|g' paastatudrukut.cpp
+    sed -i 's|muusika/|romfs:/romfailid/|g' paastatudrukut.cpp
 }
 
 revert_source_code() {
-    sed -i 's|romfs:/fondid/|fondid/|g' paastatudrukut.cpp
-    sed -i 's|romfs:/pilt/|pilt/|g' paastatudrukut.cpp
-    sed -i 's|romfs:/sfx/|sfx/|g' paastatudrukut.cpp
-    sed -i 's|romfs:/muusika/|muusika/|g' paastatudrukut.cpp
+    rm -rf romfailid
+    if [ -f paastatudrukut-varu.cpp ]; then
+        mv paastatudrukut-varu.cpp paastatudrukut.cpp
+    fi
 }
 
 handle_cancel() {
