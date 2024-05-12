@@ -14,7 +14,7 @@ const char* languageNames[MAX_LANGUAGES] = {
     "English",
 };
 
-const char* textStrings[MAX_LANGUAGES][33] = {
+const char* textStrings[MAX_LANGUAGES][34] = {
     {
         "Päästa tüdrukut",
         "Alusta mäng",
@@ -48,7 +48,8 @@ const char* textStrings[MAX_LANGUAGES][33] = {
         "Hääle effektid kasutatud freesound.org veebil",
         "Tase üks",
         "Tase kaks",
-        "Abiekraan"
+        "Abiekraan",
+        "Sätted"
     },
     {
         "Save the Girl",
@@ -83,7 +84,8 @@ const char* textStrings[MAX_LANGUAGES][33] = {
         "Sound effects used at freesound.org",
         "Level one",
         "Level two",
-        "Help screen"
+        "Help screen",
+        "Settings"
     },
 };
 
@@ -496,7 +498,7 @@ bool AlustaMangija()
                 kasHuppa = true;
             }
 
-            if (IsKeyPressed(KEY_W) && IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) && pause) PlaySound(huppamine);
+            if (IsKeyPressed(KEY_W) || IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) && pause) PlaySound(huppamine);
 
             if (IsKeyDown(KEY_S) && pause)
             {
@@ -655,6 +657,25 @@ bool Abiekraan()
     }
     UnloadFont(GLECB);
     SetWindowTitle(GetText(0));
+    return 0;
+}
+
+bool Satted()
+{
+    SetWindowTitle(GetText(33));
+    Texture2D sattedtaust = LoadTexture("pilt/taust.png");
+    Font GLECB = LoadFontEx("fondid/GLECB.TTF", 72, 0, 0);
+    while (!WindowShouldClose())
+    {
+        Rectangle tagasinupp = { 75, 45, 200, 70 };
+
+        BeginDrawing();
+        ClearBackground(WHITE);
+        DrawTexture(sattedtaust, 0, 0, WHITE);
+        DrawRectangleRec(tagasinupp, ORANGE);
+        DrawTextEx(GLECB, GetText(13), (Vector2) { 125, 45 }, GLECB.baseSize, 0, BLACK);
+        EndDrawing();
+    }
     return 0;
 }
 
