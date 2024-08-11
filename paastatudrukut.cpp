@@ -744,6 +744,7 @@ int main() {
         if (IsGamepadButtonReleased(gamepad, GAMEPAD_BUTTON_RIGHT_FACE_LEFT)) exitWindowRequested = true;
 
         if (exitWindowRequested) {
+            SetMouseCursor(1);
             exitWindow = ShowExitConfirmation();
             exitWindowRequested = false;
         }
@@ -779,6 +780,7 @@ int main() {
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) &&
             CheckCollisionPointRec(GetMousePosition(), imageRect))
         {
+            SetMouseCursor(1);
             exitWindowRequested = true;
         }
 
@@ -806,16 +808,19 @@ int main() {
 
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), ristkulik1))
         {
+            SetMouseCursor(1);
             AlustaMangija();
         }
 
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), ristkulik2))
         {
+            SetMouseCursor(1);
             Tased();
         }
 
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), abil))
         {
+            SetMouseCursor(1);
             Abiekraan();
         }
 
@@ -823,7 +828,20 @@ int main() {
 
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), krediid))
         {
+            SetMouseCursor(1);
             Krediidid();
+        }
+
+        if (CheckCollisionPointRec(GetMousePosition(), ristkulik1) ||
+            CheckCollisionPointRec(GetMousePosition(), ristkulik2) ||
+            CheckCollisionPointRec(GetMousePosition(), abil) ||
+            CheckCollisionPointRec(GetMousePosition(), imageRect) ||
+            CheckCollisionPointRec(GetMousePosition(), krediid))
+        {
+            SetMouseCursor(4);
+        }
+        else {
+            SetMouseCursor(1);
         }
 
         EndDrawing();
