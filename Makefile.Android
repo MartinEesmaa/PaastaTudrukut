@@ -57,11 +57,11 @@ PROJECT_SOURCE_FILES   ?= paastatudrukut.cpp
 PROJECT_SOURCE_DIRS = $(sort $(dir $(PROJECT_SOURCE_FILES)))
 
 # Android app configuration variables
-APP_LABEL_NAME ?= rGame
-APP_COMPANY_NAME ?= raylib
-APP_PRODUCT_NAME ?= rgame
+APP_LABEL_NAME ?= PaastaTudrukut
+APP_COMPANY_NAME ?= Martin Eesmaa
+APP_PRODUCT_NAME ?= Päästa Tüdrukut
 APP_VERSION_CODE ?= 1
-APP_VERSION_NAME ?= 1.0
+APP_VERSION_NAME ?= 0.0.1
 APP_ICON_LDPI ?= $(RAYLIB_PATH)\logo\raylib_36x36.png
 APP_ICON_MDPI ?= $(RAYLIB_PATH)\logo\raylib_48x48.png
 APP_ICON_HDPI ?= $(RAYLIB_PATH)\logo\raylib_72x72.png
@@ -93,10 +93,10 @@ endif
 
 # Compiler flags for arquitecture
 ifeq ($(ANDROID_ARCH),ARM)
-    CFLAGS = -std=c99 -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16
+    CFLAGS = -std=c++11 -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16
 endif
 ifeq ($(ANDROID_ARCH),ARM64)
-    CFLAGS = -std=c99 -target aarch64 -mfix-cortex-a53-835769
+    CFLAGS = -std=c++11 -target aarch64 -mfix-cortex-a53-835769
 endif
 # Compilation functions attributes options
 CFLAGS += -ffunction-sections -funwind-tables -fstack-protector-strong -fPIC
@@ -121,7 +121,7 @@ LDFLAGS += -L. -L$(PROJECT_BUILD_PATH)/obj -L$(PROJECT_BUILD_PATH)/lib/$(ANDROID
 LDLIBS = -lm -lc -lraylib -llog -landroid -lEGL -lGLESv2 -lOpenSLES -ldl
 
 # Generate target objects list from PROJECT_SOURCE_FILES
-OBJS = $(patsubst %.c, $(PROJECT_BUILD_PATH)/obj/%.o, $(PROJECT_SOURCE_FILES))
+OBJS = $(patsubst %.cpp, $(PROJECT_BUILD_PATH)/obj/%.o, $(PROJECT_SOURCE_FILES))
 
 # Android APK building process... some steps required...
 # NOTE: typing 'make' will invoke the default target entry called 'all',
@@ -242,9 +242,9 @@ compile_native_app_glue:
 compile_project_code: $(OBJS)
 	$(CC) -o $(PROJECT_BUILD_PATH)/lib/$(ANDROID_ARCH_NAME)/lib$(PROJECT_LIBRARY_NAME).so $(OBJS) -shared $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS)
 
-# Compile all .c files required into object (.o) files
+# Compile all .cpp files required into object (.o) files
 # NOTE: Those files will be linked into a shared library
-$(PROJECT_BUILD_PATH)/obj/%.o:%.c
+$(PROJECT_BUILD_PATH)/obj/%.o:%.cpp
 	$(CC) -c $^ -o $@ $(INCLUDE_PATHS) $(CFLAGS) --sysroot=$(ANDROID_TOOLCHAIN)/sysroot 
     
 # Compile project .java code into .class (Java bytecode) 
