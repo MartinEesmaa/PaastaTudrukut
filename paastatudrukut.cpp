@@ -259,6 +259,14 @@ bool Tased() {
             return 0;
         }
 
+        if (CheckCollisionPointRec(GetMousePosition(), tagasinupp))
+        {
+            SetMouseCursor(4);
+        }
+        else {
+            SetMouseCursor(1);
+        }
+
         EndDrawing();
     }
     UnloadTexture(tasetaust);
@@ -587,15 +595,23 @@ bool Krediidid()
 {
     SetWindowTitle(GetText(26));
     Texture2D taust = LoadTexture("pilt/taust.png");
+    //Texture2D github = LoadTexture("pilt/GitHub_Invertocat_Logo.svg.png");
+    Image githubImage = LoadImage("pilt/GitHub_Invertocat_Logo.svg.png");
+    ImageResize(&githubImage, 100, 100);
+    Texture2D github = LoadTextureFromImage(githubImage);
+    UnloadImage(githubImage);
     Font fontTtf = LoadFontEx("fondid/MAIAN.TTF", 72, 0, 250);
     while (!WindowShouldClose())
     {
         Rectangle tagasinupp = { 75, 45, 200, 70 };
+        //Rectangle githubbtn1 = {550, 45, 50, 50};
+        Rectangle githubbtn = { GetScreenWidth() - 100, GetScreenHeight() - 100, 100, 100 };
 
         BeginDrawing();
         ClearBackground(WHITE);
         DrawTexture(taust, 0, 0, WHITE);
         DrawRectangleRec(tagasinupp, ORANGE);
+        DrawTexture(github, GetScreenWidth() - 100, GetScreenHeight() - 100, WHITE);
         DrawTextEx(fontTtf, GetText(13), (Vector2) { 100, 45 }, fontTtf.baseSize, 0, BLACK);
         DrawTextEx(fontTtf, GetText(26), (Vector2) { 500.0f, 45.0f }, fontTtf.baseSize, 0, WHITE);
         DrawTextEx(fontTtf, GetText(27), (Vector2) { 240.0f, 110.0f }, fontTtf.baseSize, 0, WHITE);
@@ -610,6 +626,21 @@ bool Krediidid()
             UnloadFont(fontTtf);
             SetWindowTitle(GetText(0));
             return 0;
+        }
+
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), githubbtn))
+        {
+            OpenURL("https://github.com/MartinEesmaa/PaastaTudrukut");
+        }
+
+        if (CheckCollisionPointRec(GetMousePosition(), githubbtn) ||
+            CheckCollisionPointRec(GetMousePosition(), tagasinupp))
+        {
+            SetMouseCursor(4);
+        }
+        else
+        {
+            SetMouseCursor(1);
         }
 
         EndDrawing();
@@ -651,6 +682,15 @@ bool Abiekraan()
             UnloadFont(GLECB);
             SetWindowTitle(GetText(0));
             return 0;
+        }
+
+        if (CheckCollisionPointRec(GetMousePosition(), tagasinupp))
+        {
+            SetMouseCursor(4);
+        }
+        else
+        {
+            SetMouseCursor(1);
         }
 
         EndDrawing();
