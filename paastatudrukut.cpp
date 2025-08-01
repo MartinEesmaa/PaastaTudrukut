@@ -18,7 +18,7 @@ const char* textStrings[MAX_LANGUAGES][34] = {
     {
         "Päästa tüdrukut",
         "Alusta mäng",
-        "2023 Martin Eesmaa",
+        "(C) 2023-2025 Martin Eesmaa",
         "Oled sa kindel, et tahad väljuda mängu ära? J/E?",
         "Tased",
         "Resolutsioon",
@@ -54,7 +54,7 @@ const char* textStrings[MAX_LANGUAGES][34] = {
     {
         "Save the Girl",
         "Start Game",
-        "2023 Martin Eesmaa",
+        "(C) 2023-2025 Martin Eesmaa",
         "Are you sure you want to exit the game? J/E?",
         "Levels",
         "Resolution",
@@ -775,6 +775,8 @@ int main() {
 
     bool paus = false;
 
+    float textFix = (selectedLanguage == LANGUAGE_ESTONIAN) ? 250.0f : 200.0f;
+
     while (!exitWindow) {
         if (IsKeyPressed(KEY_SPACE)) {
             ToggleFullScreenWindow(screenWidth, screenHeight);
@@ -815,7 +817,7 @@ int main() {
         DrawTexture(xnupp, GetScreenWidth() - xnupp.width, GetScreenHeight() / 12 - xnupp.height, WHITE);
         DrawTexture(abi, 0, 0, WHITE);
         //DrawTextureRec(heli, heliRec, (Vector2) { helibounds.x, helibounds.y }, WHITE);
-        DrawTextEx(fontTtf, GetText(26), (Vector2) { GetScreenWidth() - 250.0f, GetScreenHeight() - 75.0f }, fontTtf.baseSize, 0, BLACK);
+        DrawTextEx(fontTtf, GetText(26), (Vector2) { GetScreenWidth() - textFix, GetScreenHeight() - 75.0f }, fontTtf.baseSize, 0, BLACK);
 
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) &&
             CheckCollisionPointRec(GetMousePosition(), imageRect))
