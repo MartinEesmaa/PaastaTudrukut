@@ -8,6 +8,10 @@ Before I start to build the game, I'm gonna use Raylib with C++ code to make gam
 
 [Estonian language original version / Eesti keel originaal versioon](README.md)
 
+[Videogame explanation (on YouTube)](https://youtu.be/ksAukrR2f6g)
+
+This video was uploaded on 27th October 2023.
+
 ## System requirements to play
 
 System requirements:

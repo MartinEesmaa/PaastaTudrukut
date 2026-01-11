@@ -8,6 +8,10 @@ Enne kui ma hakkan ehitama mängu, ma kasutan Raylib koos C++ koodi teha mängup
 
 [Inglise keel versioon / English language version](README-en.md)
 
+[Video mäng seletamine (inglise keeles YouTube-is)](https://youtu.be/ksAukrR2f6g)
+
+See video oli üleslaaditud 27. oktoober 2023 aastal.
+
 ## Süsteemi nõuded mängida
 
 Süsteem nõud:
